@@ -47,7 +47,7 @@ class Product
         return Money::fromInt($this->price);
     }
 
-    public function getId(): Uuid
+    public function getId(): string
     {
         return $this->id;
     }

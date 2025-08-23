@@ -14,11 +14,13 @@ class CreateProductCommandHandler
     {
     }
 
-    public function __invoke(CreateProductCommand $command): void
+    public function __invoke(CreateProductCommand $command): Product
     {
-        $this->transactionRunner->run(function () use ($command) {
+        return $this->transactionRunner->run(function () use ($command) {
             $product = Product::create($command->getName(), Money::fromFloat($command->getPrice()), $command->getOnHand());
             $this->productRepository->add($product);
+
+            return $product;
         });
     }
 }
