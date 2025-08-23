@@ -1,0 +1,14 @@
+catalogue_controllers:
+    resource:
+        path: ../src/Catalogue/Presentation/Http/Controller/
+        namespace: App\Catalogue\Presentation\Http\Controller
+    type: attribute
+    defaults:
+        _is_internal: true
+order_controllers:
+    resource:
+        path: ../src/Order/Presentation/Http/Controller/
+        namespace: App\Order\Presentation\Http\Controller
+    type: attribute
+    defaults:
+        _is_internal: true

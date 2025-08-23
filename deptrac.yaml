@@ -1,0 +1,118 @@
+deptrac:
+    paths:
+        - ./src
+    exclude_files:
+        - '#/Tests/#'
+
+    layers:
+        # ---- Shared Kernel
+        -   name: SharedDomain
+            collectors:
+                -   type: classNameRegex
+                    value: '#^App\\SharedKernel\\Domain\\#'
+
+        -   name: SharedApplication
+            collectors:
+                -   type: classNameRegex
+                    value: '#^App\\SharedKernel\\Application\\#'
+
+        -   name: SharedInfrastructure
+            collectors:
+                -   type: classNameRegex
+                    value: '#^App\\SharedKernel\\Infrastructure\\#'
+
+        # ---- Order BC
+        -   name: OrderDomain
+            collectors:
+                -   type: classNameRegex
+                    value: '#^App\\Order\\Domain\\#'
+
+        -   name: OrderApplication
+            collectors:
+                -   type: classNameRegex
+                    value: '#^App\\Order\\Application\\#'
+
+        -   name: OrderInfrastructure
+            collectors:
+                -   type: classNameRegex
+                    value: '#^App\\Order\\Infrastructure\\#'
+
+        -   name: OrderPresentation
+            collectors:
+                -   type: classNameRegex
+                    value: '#^App\\Order\\Presentation\\#'
+
+        # ---- Catalogue BC
+        -   name: CatalogueDomain
+            collectors:
+                -   type: classNameRegex
+                    value: '#^App\\Catalogue\\Domain\\#'
+
+        -   name: CatalogueApplication
+            collectors:
+                -   type: classNameRegex
+                    value: '#^App\\Catalogue\\Application\\#'
+
+        -   name: CatalogueInfrastructure
+            collectors:
+                -   type: classNameRegex
+                    value: '#^App\\Catalogue\\Infrastructure\\#'
+
+        -   name: CataloguePresentation
+            collectors:
+                -   type: classNameRegex
+                    value: '#^App\\Catalogue\\Presentation\\#'
+        # ---- Doctrine
+        -   name: DoctrineMapping
+            collectors:
+                -   type: classNameRegex
+                    value: '#^Doctrine\\ORM\\Mapping\\#'
+
+        -   name: DoctrineInfrastructure
+            collectors:
+                -   type: classNameRegex
+                    value: '#^Doctrine\\ORM\\(EntityManagerInterface|EntityManager)#'
+
+    ruleset:
+        # Shared Kernel
+        SharedDomain:
+            - DoctrineMapping
+        SharedApplication:
+            - SharedDomain
+        SharedInfrastructure:
+            - SharedDomain
+            - DoctrineInfrastructure
+            - Framework
+        # Order BC
+        OrderDomain: [ DoctrineMapping,SharedDomain ]
+        OrderApplication:
+            - OrderDomain
+            - SharedDomain
+            - SharedApplication
+        OrderInfrastructure:
+            - OrderDomain
+            - SharedDomain
+            - DoctrineInfrastructure
+            - SharedInfrastructure
+        OrderPresentation:
+            - OrderApplication
+            - SharedApplication
+
+        # Catalogue BC
+        CatalogueDomain: [ DoctrineMapping,SharedDomain ]
+        CatalogueApplication:
+            - CatalogueDomain
+            - SharedDomain
+            - SharedApplication
+        CatalogueInfrastructure:
+            - CatalogueDomain
+            - SharedDomain
+            - DoctrineInfrastructure
+            - SharedInfrastructure
+        CataloguePresentation:
+            - CatalogueApplication
+            - SharedApplication
+
+    analyser:
+        types:
+            - class
