@@ -16,7 +16,20 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function get(string $productId): ?Product
     {
-        return $this->entityManager->find(Product::class, $productId);
+        return $this->entityManager->getRepository(Product::class)->findOneBy(['id' => $productId]);
+    }
+
+    public function getCollection(bool $onlyAvailable, ?int $maxPrice): array
+    {
+        $qb = $this->entityManager->createQueryBuilder()->select("p")->from(Product::class, "p");
+        if ($onlyAvailable) {
+            $qb->andWhere("p.on_hand - p.on_hold > 0");
+        }
+        if ($maxPrice) {
+            $qb->andWhere("p.price <= :maxPrice")->setParameter("maxPrice", $maxPrice);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     public function add(Product $product): void

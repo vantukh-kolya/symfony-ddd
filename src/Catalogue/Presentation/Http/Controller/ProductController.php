@@ -4,6 +4,8 @@ namespace App\Catalogue\Presentation\Http\Controller;
 
 use App\Catalogue\Application\Command\CreateProductCommand;
 use App\Catalogue\Application\Command\Handler\CreateProductCommandHandler;
+use App\Catalogue\Application\Query\GetProductsQuery;
+use App\Catalogue\Application\Query\Handler\GetProductsQueryHandler;
 use App\Catalogue\Presentation\Http\HttpResponseFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +17,12 @@ class ProductController
 {
     public function __construct(private HttpResponseFactory $responseFactory)
     {
+    }
+
+    #[Route('/products', name: 'products.list', methods: ['GET'])]
+    public function listProducts(GetProductsQueryHandler $handler, Request $request): JsonResponse
+    {
+        return $this->responseFactory->success($handler(new GetProductsQuery($request->get('only_available', false), $request->get('max_price'))));
     }
 
     #[Route('/products', name: 'products.create', methods: ['POST'])]

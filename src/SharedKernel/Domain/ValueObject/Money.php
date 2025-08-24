@@ -5,13 +5,15 @@ namespace App\SharedKernel\Domain\ValueObject;
 final class Money
 {
     private int $amount;
+    private int $scale;
 
-    private function __construct(int $amount)
+    private function __construct(int $amount, int $scale = 2)
     {
         if ($amount < 0) {
             throw new \InvalidArgumentException('Money cannot be negative.');
         }
         $this->amount = $amount;
+        $this->scale = $scale;
     }
 
     public static function fromInt(int $amount): self
@@ -19,19 +21,14 @@ final class Money
         return new self($amount);
     }
 
-    public static function fromFloat(float $amount, int $scale = 2): self
-    {
-        return new self((int)round($amount * (10 ** $scale)));
-    }
-
     public function toInt(): int
     {
         return $this->amount;
     }
 
-    public function toFloat(int $scale = 2): float
+    public function toFloat(): float
     {
-        return $this->amount / (10 ** $scale);
+        return $this->amount / (10 ** $this->scale);
     }
 
     public function __toString(): string
