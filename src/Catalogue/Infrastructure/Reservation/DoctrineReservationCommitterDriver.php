@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Catalogue\Infrastructure\Doctrine\Integration;
+namespace App\Catalogue\Infrastructure\Reservation;
 
 use App\Catalogue\Domain\Repository\ProductRepositoryInterface;
 use App\Integration\OrderCatalogue\CatalogueReservationCommitterDriver as ReservationCommitterDriverInterface;
@@ -8,7 +8,7 @@ use App\SharedKernel\Contracts\Catalogue\Reservation\CommitReservedStockForOrder
 use App\SharedKernel\Contracts\Catalogue\Reservation\ReservationCommitResult;
 use App\SharedKernel\Domain\Persistence\TransactionRunnerInterface;
 
-class CatalogueReservationCommitterDriver implements ReservationCommitterDriverInterface
+class DoctrineReservationCommitterDriver implements ReservationCommitterDriverInterface
 {
     public function __construct(private ProductRepositoryInterface $productRepository, private TransactionRunnerInterface $transactionRunner)
     {
@@ -16,20 +16,20 @@ class CatalogueReservationCommitterDriver implements ReservationCommitterDriverI
 
     public function reserveByOrder(CommitReservedStockForOrderRequest $request): ReservationCommitResult
     {
-        return $this->transactionRunner->run(function () use ($request) {
-            foreach ($request->items as $item) {
-                $product = $this->productRepository->get($item['product_id']);
-                if ($product === null) {
-                    return ReservationCommitResult::fail('Product not found');
+        try {
+            $this->transactionRunner->run(function () use ($request) {
+                foreach ($request->items as $item) {
+                    $product = $this->productRepository->get($item['product_id']);
+                    if (!$product) {
+                        throw new \DomainException('Product not found:' . $item['product_id']);
+                    }
+                    $product->commitReservation($item['quantity']);
                 }
-                if ($item['quantity'] <= 0) {
-                    return ReservationCommitResult::fail('Invalid quantity');
-                }
-
-                $product->commitReservation((int)$item['quantity']);
-            }
+            });
             return ReservationCommitResult::ok();
-        });
+        } catch (\DomainException $e) {
+            return ReservationCommitResult::fail($e->getMessage());
+        }
     }
 
 }

@@ -20,9 +20,9 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Order\Application\Port\ReservationServicePort:
         alias: App\Integration\OrderCatalogue\CatalogueReservationServiceAdapter
-    App\Integration\OrderCatalogue\CatalogueReservationDriverInterface:
-        alias: App\Catalogue\Infrastructure\Integration\CatalogueReservationServiceAdapter
+    App\Integration\OrderCatalogue\CatalogueReservationDriver:
+        alias: App\Catalogue\Infrastructure\Reservation\DoctrineReservationDriver
     App\Order\Application\Port\ReservationCommitterPort:
         alias: App\Integration\OrderCatalogue\CatalogueReservationCommitterAdapter
-    App\Integration\OrderCatalogue\CatalogueReservationCommitterDriverInterface:
-        alias: App\Catalogue\Infrastructure\Integration\CatalogueReservationCommitterServiceAdapter
+    App\Integration\OrderCatalogue\CatalogueReservationCommitterDriver:
+        alias: App\Catalogue\Infrastructure\Reservation\DoctrineReservationCommitterDriver
