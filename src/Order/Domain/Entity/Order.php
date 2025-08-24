@@ -29,7 +29,8 @@ class Order
     private string $status;
     #[ORM\Column(type: "datetime")]
     private \DateTime $created_at;
-
+    #[ORM\Column(type: "datetime", nullable: true)]
+    private ?\DateTime $fulfilled_at = null;
     #[ORM\OneToMany(mappedBy: "order", targetEntity: OrderItem::class, cascade: ["persist"], orphanRemoval: true)]
     private Collection $items;
 
@@ -55,6 +56,12 @@ class Order
         return $order;
     }
 
+    public function fulfill(): void
+    {
+        $this->status = OrderStatus::FULFILLED->value;
+        $this->fulfilled_at = new \DateTime();
+    }
+
     public function getId(): string
     {
         return $this->id;
@@ -75,8 +82,20 @@ class Order
         $this->status = OrderStatus::RESERVED->value;
     }
 
-    public function setReservationFailed(): void
+    public function setFailed(): void
     {
-        $this->status = OrderStatus::RESERVATION_FAILED->value;
+        $this->status = OrderStatus::FAILED->value;
+    }
+
+
+
+    public function isFulfilled(): bool
+    {
+        return $this->status === OrderStatus::FULFILLED->value;
+    }
+
+    public function isReserved(): bool
+    {
+        return $this->status === OrderStatus::RESERVED->value;
     }
 }

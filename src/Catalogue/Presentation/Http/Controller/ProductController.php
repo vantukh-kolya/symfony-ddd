@@ -12,20 +12,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-#[Route('/api/catalogue')]
+#[Route('/api/products')]
 class ProductController
 {
     public function __construct(private HttpResponseFactory $responseFactory)
     {
     }
 
-    #[Route('/products', name: 'products.list', methods: ['GET'])]
+    #[Route('', name: 'products.list', methods: ['GET'])]
     public function listProducts(GetProductsQueryHandler $handler, Request $request): JsonResponse
     {
         return $this->responseFactory->success($handler(new GetProductsQuery($request->get('only_available', false), $request->get('max_price'))));
     }
 
-    #[Route('/products', name: 'products.create', methods: ['POST'])]
+    #[Route('', name: 'products.create', methods: ['POST'])]
     public function create(CreateProductCommandHandler $handler, Request $request, ValidatorInterface $validator): JsonResponse
     {
         $command = new CreateProductCommand($request->get('name', ''), $request->get('price', 0), $request->get('on_hand', 0));

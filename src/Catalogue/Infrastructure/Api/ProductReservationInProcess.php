@@ -3,14 +3,14 @@
 namespace App\Catalogue\Infrastructure\Api;
 
 use App\Catalogue\Domain\Repository\ProductRepositoryInterface;
-use App\SharedKernel\Contracts\Catalogue\ProductReservationInterface;
-use App\SharedKernel\Contracts\Catalogue\ReservationResult;
-use App\SharedKernel\Contracts\Catalogue\OrderReserveRequest;
+use App\SharedKernel\Contracts\Catalogue\Reservation\OrderReserveRequest;
+use App\SharedKernel\Contracts\Catalogue\Reservation\ProductReservationInterface;
+use App\SharedKernel\Contracts\Catalogue\Reservation\ReservationResult;
 use App\SharedKernel\Domain\Persistence\TransactionRunnerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 
 #[AsAlias(id: ProductReservationInterface::class)]
-class ProductReservationInterfaceInProcess implements ProductReservationInterface
+class ProductReservationInProcess implements ProductReservationInterface
 {
     public function __construct(private ProductRepositoryInterface $productRepository, private TransactionRunnerInterface $transactionRunner)
     {
@@ -32,11 +32,6 @@ class ProductReservationInterfaceInProcess implements ProductReservationInterfac
             }
             return ReservationResult::ok();
         });
-    }
-
-    public function release(string $orderId): ReservationResult
-    {
-        // TODO: Implement release() method.
     }
 
 }

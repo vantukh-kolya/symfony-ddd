@@ -1,10 +1,8 @@
 <?php
 
-namespace App\SharedKernel\Contracts\Catalogue;
+namespace App\SharedKernel\Contracts\Catalogue\Reservation;
 
 interface ProductReservationInterface
 {
     public function reserveByOrder(OrderReserveRequest $request): ReservationResult;
-
-    public function release(string $orderId): ReservationResult;
 }

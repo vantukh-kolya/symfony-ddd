@@ -14,6 +14,11 @@ class OrderRepository implements OrderRepositoryInterface
     {
     }
 
+    public function get(string $orderId): ?Order
+    {
+        return $this->entityManager->getRepository(Order::class)->findOneBy(['id' => $orderId]);
+    }
+
     public function add(Order $order): void
     {
         $this->entityManager->persist($order);

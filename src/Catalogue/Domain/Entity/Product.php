@@ -73,17 +73,21 @@ class Product
         $this->onHold += $qty;
     }
 
-    public function release(int $qty): void
+    public function commitReservation(int $qty): void
     {
         if ($qty <= 0) {
             throw new \InvalidArgumentException('Quantity must be > 0.');
         }
         if ($qty > $this->onHold) {
-            throw new \LogicException('Cannot release more than on hold.');
+            throw new \LogicException('Cannot commit more than reserved.');
         }
-        $this->onHold -= $qty;
-    }
+        if ($qty > $this->onHand) {
+            throw new \LogicException('Not enough stock on hand.');
+        }
 
+        $this->onHold -= $qty;
+        $this->onHand -= $qty;
+    }
 
     public function getAvailable(): int
     {

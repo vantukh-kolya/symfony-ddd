@@ -6,8 +6,8 @@ use App\Order\Application\Command\CreateOrderCommand;
 use App\Order\Domain\Entity\Order;
 use App\Order\Domain\Repository\OrderRepositoryInterface;
 use App\Order\Domain\ValueObject\OrderLine;
-use App\SharedKernel\Contracts\Catalogue\OrderReserveRequest;
-use App\SharedKernel\Contracts\Catalogue\ProductReservationInterface;
+use App\SharedKernel\Contracts\Catalogue\Reservation\OrderReserveRequest;
+use App\SharedKernel\Contracts\Catalogue\Reservation\ProductReservationInterface;
 use App\SharedKernel\Domain\Persistence\TransactionRunnerInterface;
 use App\SharedKernel\Domain\ValueObject\Money;
 
@@ -20,10 +20,12 @@ class CreateOrderCommandHandler
     ) {
     }
 
-    public function __invoke(CreateOrderCommand $command): void
+    public function __invoke(CreateOrderCommand $command): Order
     {
         $order = $this->createOrder($command);
         $this->reserveProducts($order);
+
+        return $order;
     }
 
     private function createOrder(CreateOrderCommand $command): Order
@@ -49,10 +51,12 @@ class CreateOrderCommandHandler
         }
         $request = new OrderReserveRequest($order->getId(), $items);
         $reservationResult = $this->productReservation->reserveByOrder($request);
-        if ($reservationResult->success) {
-            $order->setReserved();
-        } else {
-            $order->setReservationFailed();
-        }
+        $this->transactionRunner->run(function () use ($order, $reservationResult) {
+            if ($reservationResult->success) {
+                $order->setReserved();
+            } else {
+                $order->setFailed();
+            }
+        });
     }
 }
