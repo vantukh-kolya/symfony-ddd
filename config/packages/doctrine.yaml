@@ -19,15 +19,15 @@ doctrine:
         auto_mapping: false
         mappings:
             Catalogue:
-                type: attribute
+                type: xml
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Catalogue/Domain/Entity'
+                dir: '%kernel.project_dir%/src/Catalogue/Infrastructure/Doctrine/Mapping'
                 prefix: 'App\Catalogue\Domain\Entity'
                 alias: Catalogue
             Order:
-                type: attribute
+                type: xml
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Order/Domain/Entity'
+                dir: '%kernel.project_dir%/src/Order/Infrastructure/Doctrine/Mapping'
                 prefix: 'App\Order\Domain\Entity'
                 alias: Order
         controller_resolver:

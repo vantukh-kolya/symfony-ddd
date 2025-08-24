@@ -3,7 +3,7 @@
 namespace App\Order\Application\Command\Handler;
 
 use App\Order\Domain\Repository\OrderRepositoryInterface;
-use App\SharedKernel\Contracts\Catalogue\Reservation\ReserveStockForOrderRequest;
+use App\SharedKernel\Contracts\Catalogue\Reservation\CommitReservedStockForOrderRequest;
 use App\SharedKernel\Contracts\Catalogue\Reservation\ReservationCommitterInterface;
 use App\SharedKernel\Domain\Persistence\TransactionRunnerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -33,7 +33,7 @@ class FulfillOrderCommandHandler
         foreach ($order->getItems() as $i) {
             $items[] = ['product_id' => (string)$i->getProductId(), 'quantity' => $i->getQuantity()];
         }
-        $request = new ReserveStockForOrderRequest($order->getId(), $items);
+        $request = new CommitReservedStockForOrderRequest($order->getId(), $items);
         $stockFulfillmentResult = $this->stock->commitReservedItemsForOrder($request);
         $this->transactionRunner->run(function () use ($order, $stockFulfillmentResult) {
             if ($stockFulfillmentResult->success) {

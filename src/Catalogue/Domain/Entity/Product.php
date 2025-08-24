@@ -6,21 +6,13 @@ use App\SharedKernel\Domain\ValueObject\Money;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
-#[ORM\Entity]
-#[ORM\Table(name: "products")]
 class Product
 {
-    #[ORM\Id]
-    #[ORM\Column(type: "string", unique: true)]
-    #[ORM\GeneratedValue(strategy: 'NONE')]
+
     private string $id;
-    #[ORM\Column(type: "string", length: 255)]
     private string $name;
-    #[ORM\Column(type: "integer", options: ["unsigned" => true])]
     private int $price;
-    #[ORM\Column(name: "on_hand", type: "integer", options: ["unsigned" => true])]
     private int $onHand = 0;
-    #[ORM\Column(name: "on_hold", type: "integer", options: ["unsigned" => true])]
     private int $onHold = 0;
 
     public static function create(string $name, Money $price, int $onHand): self

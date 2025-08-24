@@ -7,11 +7,8 @@ use App\Order\Domain\ValueObject\OrderLine;
 use App\SharedKernel\Domain\ValueObject\Money;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
-#[ORM\Entity]
-#[ORM\Table(name: "orders")]
 class Order
 {
     public function __construct()
@@ -19,19 +16,11 @@ class Order
         $this->items = new ArrayCollection();
     }
 
-    #[ORM\Id]
-    #[ORM\Column(type: "string", unique: true)]
-    #[ORM\GeneratedValue(strategy: "NONE")]
     private string $id;
-    #[ORM\Column(type: "integer")]
-    private int $amount_to_pay;
-    #[ORM\Column(type: 'string', length: 32)]
+    private int $amountToPay;
     private string $status;
-    #[ORM\Column(type: "datetime")]
-    private \DateTime $created_at;
-    #[ORM\Column(type: "datetime", nullable: true)]
-    private ?\DateTime $fulfilled_at = null;
-    #[ORM\OneToMany(mappedBy: "order", targetEntity: OrderItem::class, cascade: ["persist"], orphanRemoval: true)]
+    private \DateTime $createdAt;
+    private ?\DateTime $fulfilledAt = null;
     private Collection $items;
 
     public static function create(Money $amountToPay, OrderLine ...$lines): self
@@ -43,9 +32,9 @@ class Order
 
         $order = new self();
         $order->id = Uuid::v7();
-        $order->amount_to_pay = $amountToPayValue;
+        $order->amountToPay = $amountToPayValue;
         $order->status = OrderStatus::PENDING->value;
-        $order->created_at = new \DateTime();
+        $order->createdAt = new \DateTime();
 
         foreach ($lines as $l) {
             $order->items->add(
@@ -59,7 +48,7 @@ class Order
     public function fulfill(): void
     {
         $this->status = OrderStatus::FULFILLED->value;
-        $this->fulfilled_at = new \DateTime();
+        $this->fulfilledAt = new \DateTime();
     }
 
     public function getId(): string
@@ -69,10 +58,10 @@ class Order
 
     public function getAmountToPay(): int
     {
-        return $this->amount_to_pay;
+        return $this->amountToPay;
     }
 
-    public function getItems(): Collection
+    public function getItems(): iterable
     {
         return $this->items;
     }
@@ -86,7 +75,6 @@ class Order
     {
         $this->status = OrderStatus::FAILED->value;
     }
-
 
 
     public function isFulfilled(): bool

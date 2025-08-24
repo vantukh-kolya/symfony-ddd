@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                                      https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Catalogue\Domain\Entity\Product" table="products">
+        <id name="id" type="string" column="id">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="name" type="string" length="255" nullable="false"/>
+
+        <field name="price" type="integer">
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+
+        <field name="onHand" type="integer" column="on_hand">
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+
+        <field name="onHold" type="integer" column="on_hold">
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+    </entity>
+</doctrine-mapping>
