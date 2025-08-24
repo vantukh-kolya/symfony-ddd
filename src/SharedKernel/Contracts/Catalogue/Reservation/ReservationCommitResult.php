@@ -1,8 +1,8 @@
 <?php
 
-namespace App\SharedKernel\Contracts\Catalogue\Stock;
+namespace App\SharedKernel\Contracts\Catalogue\Reservation;
 
-readonly class StockCommitResult
+readonly class ReservationCommitResult
 {
     private function __construct(public bool $success, public ?string $reason = null)
     {

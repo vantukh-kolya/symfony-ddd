@@ -3,20 +3,18 @@
 namespace App\Catalogue\Infrastructure\Api;
 
 use App\Catalogue\Domain\Repository\ProductRepositoryInterface;
-use App\SharedKernel\Contracts\Catalogue\Reservation\OrderReserveRequest;
-use App\SharedKernel\Contracts\Catalogue\Reservation\ProductReservationInterface;
+use App\SharedKernel\Contracts\Catalogue\Reservation\ReservationServiceInterface;
 use App\SharedKernel\Contracts\Catalogue\Reservation\ReservationResult;
+use App\SharedKernel\Contracts\Catalogue\Reservation\ReserveStockForOrderRequest;
 use App\SharedKernel\Domain\Persistence\TransactionRunnerInterface;
-use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 
-#[AsAlias(id: ProductReservationInterface::class)]
-class ProductReservationInProcess implements ProductReservationInterface
+class ReservationServiceDoctrine implements ReservationServiceInterface
 {
     public function __construct(private ProductRepositoryInterface $productRepository, private TransactionRunnerInterface $transactionRunner)
     {
     }
 
-    public function reserveByOrder(OrderReserveRequest $request): ReservationResult
+    public function reserveByOrder(ReserveStockForOrderRequest $request): ReservationResult
     {
         return $this->transactionRunner->run(function () use ($request) {
             foreach ($request->items as $item) {

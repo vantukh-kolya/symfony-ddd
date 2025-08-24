@@ -6,8 +6,8 @@ use App\Order\Application\Command\CreateOrderCommand;
 use App\Order\Domain\Entity\Order;
 use App\Order\Domain\Repository\OrderRepositoryInterface;
 use App\Order\Domain\ValueObject\OrderLine;
-use App\SharedKernel\Contracts\Catalogue\Reservation\OrderReserveRequest;
-use App\SharedKernel\Contracts\Catalogue\Reservation\ProductReservationInterface;
+use App\SharedKernel\Contracts\Catalogue\Reservation\CommitReservedStockForOrderRequest;
+use App\SharedKernel\Contracts\Catalogue\Reservation\ReservationServiceInterface;
 use App\SharedKernel\Domain\Persistence\TransactionRunnerInterface;
 use App\SharedKernel\Domain\ValueObject\Money;
 
@@ -16,7 +16,7 @@ class CreateOrderCommandHandler
     public function __construct(
         private OrderRepositoryInterface $orderRepository,
         private TransactionRunnerInterface $transactionRunner,
-        private ProductReservationInterface $productReservation
+        private ReservationServiceInterface $productReservation
     ) {
     }
 
@@ -49,7 +49,7 @@ class CreateOrderCommandHandler
         foreach ($order->getItems() as $i) {
             $items[] = ['product_id' => (string)$i->getProductId(), 'quantity' => $i->getQuantity()];
         }
-        $request = new OrderReserveRequest($order->getId(), $items);
+        $request = new CommitReservedStockForOrderRequest($order->getId(), $items);
         $reservationResult = $this->productReservation->reserveByOrder($request);
         $this->transactionRunner->run(function () use ($order, $reservationResult) {
             if ($reservationResult->success) {

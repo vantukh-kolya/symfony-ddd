@@ -1,8 +1,8 @@
 <?php
 
-namespace App\SharedKernel\Contracts\Catalogue\Stock;
+namespace App\SharedKernel\Contracts\Catalogue\Reservation;
 
-class OrderReservationCommitRequest
+final class ReserveStockForOrderRequest
 {
     public function __construct(public string $orderId, public array $items)
     {

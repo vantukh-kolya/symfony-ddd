@@ -2,7 +2,7 @@
 
 namespace App\SharedKernel\Contracts\Catalogue\Reservation;
 
-class ReservationResult
+readonly class ReservationResult
 {
     private function __construct(public bool $success, public ?string $reason = null)
     {
