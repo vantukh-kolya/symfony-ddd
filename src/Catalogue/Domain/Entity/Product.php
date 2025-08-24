@@ -3,7 +3,6 @@
 namespace App\Catalogue\Domain\Entity;
 
 use App\SharedKernel\Domain\ValueObject\Money;
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 class Product

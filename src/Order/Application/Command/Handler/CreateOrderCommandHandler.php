@@ -3,10 +3,10 @@
 namespace App\Order\Application\Command\Handler;
 
 use App\Order\Application\Command\CreateOrderCommand;
+use App\Order\Application\Port\ReservationServicePort;
 use App\Order\Domain\Entity\Order;
 use App\Order\Domain\Repository\OrderRepositoryInterface;
 use App\Order\Domain\ValueObject\OrderLine;
-use App\SharedKernel\Contracts\Catalogue\Reservation\ReservationServiceInterface;
 use App\SharedKernel\Contracts\Catalogue\Reservation\ReserveStockForOrderRequest;
 use App\SharedKernel\Domain\Persistence\TransactionRunnerInterface;
 use App\SharedKernel\Domain\ValueObject\Money;
@@ -16,7 +16,7 @@ class CreateOrderCommandHandler
     public function __construct(
         private OrderRepositoryInterface $orderRepository,
         private TransactionRunnerInterface $transactionRunner,
-        private ReservationServiceInterface $productReservation
+        private ReservationServicePort $productReservation
     ) {
     }
 

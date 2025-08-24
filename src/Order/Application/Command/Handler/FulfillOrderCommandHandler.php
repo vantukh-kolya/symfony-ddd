@@ -2,9 +2,9 @@
 
 namespace App\Order\Application\Command\Handler;
 
+use App\Order\Application\Port\ReservationCommitterPort;
 use App\Order\Domain\Repository\OrderRepositoryInterface;
 use App\SharedKernel\Contracts\Catalogue\Reservation\CommitReservedStockForOrderRequest;
-use App\SharedKernel\Contracts\Catalogue\Reservation\ReservationCommitterInterface;
 use App\SharedKernel\Domain\Persistence\TransactionRunnerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -13,7 +13,7 @@ class FulfillOrderCommandHandler
     public function __construct(
         private OrderRepositoryInterface $orderRepository,
         private TransactionRunnerInterface $transactionRunner,
-        private ReservationCommitterInterface $stock
+        private ReservationCommitterPort $stock
     ) {
     }
 

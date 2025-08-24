@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Catalogue\Infrastructure\Api;
+namespace App\Catalogue\Infrastructure\Doctrine\Integration;
 
 use App\Catalogue\Domain\Repository\ProductRepositoryInterface;
+use App\Integration\OrderCatalogue\CatalogueReservationCommitterDriver as ReservationCommitterDriverInterface;
 use App\SharedKernel\Contracts\Catalogue\Reservation\CommitReservedStockForOrderRequest;
-use App\SharedKernel\Contracts\Catalogue\Reservation\ReservationCommitterInterface;
 use App\SharedKernel\Contracts\Catalogue\Reservation\ReservationCommitResult;
 use App\SharedKernel\Domain\Persistence\TransactionRunnerInterface;
 
-class ReservationCommitterDoctrine implements ReservationCommitterInterface
+class CatalogueReservationCommitterDriver implements ReservationCommitterDriverInterface
 {
     public function __construct(private ProductRepositoryInterface $productRepository, private TransactionRunnerInterface $transactionRunner)
     {
     }
 
-    public function commitReservedItemsForOrder(CommitReservedStockForOrderRequest $request): ReservationCommitResult
+    public function reserveByOrder(CommitReservedStockForOrderRequest $request): ReservationCommitResult
     {
         return $this->transactionRunner->run(function () use ($request) {
             foreach ($request->items as $item) {

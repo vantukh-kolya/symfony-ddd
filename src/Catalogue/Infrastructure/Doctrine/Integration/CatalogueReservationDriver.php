@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Catalogue\Infrastructure\Api;
+namespace App\Catalogue\Infrastructure\Doctrine\Integration;
 
 use App\Catalogue\Domain\Repository\ProductRepositoryInterface;
-use App\SharedKernel\Contracts\Catalogue\Reservation\ReservationServiceInterface;
+use App\Integration\OrderCatalogue\CatalogueReservationDriver as CatalogueReservationDriverInterface;
 use App\SharedKernel\Contracts\Catalogue\Reservation\ReservationResult;
 use App\SharedKernel\Contracts\Catalogue\Reservation\ReserveStockForOrderRequest;
 use App\SharedKernel\Domain\Persistence\TransactionRunnerInterface;
 
-class ReservationServiceDoctrine implements ReservationServiceInterface
+class CatalogueReservationDriver implements CatalogueReservationDriverInterface
 {
     public function __construct(private ProductRepositoryInterface $productRepository, private TransactionRunnerInterface $transactionRunner)
     {
@@ -31,5 +31,4 @@ class ReservationServiceDoctrine implements ReservationServiceInterface
             return ReservationResult::ok();
         });
     }
-
 }

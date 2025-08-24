@@ -18,7 +18,11 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\SharedKernel\Contracts\Catalogue\Reservation\ReservationServiceInterface:
-        alias: App\Catalogue\Infrastructure\Api\ReservationServiceDoctrine
-    App\SharedKernel\Contracts\Catalogue\Reservation\ReservationCommitterInterface:
-        alias: App\Catalogue\Infrastructure\Api\ReservationCommitterDoctrine
+    App\Order\Application\Port\ReservationServicePort:
+        alias: App\Integration\OrderCatalogue\CatalogueReservationServiceAdapter
+    App\Integration\OrderCatalogue\CatalogueReservationDriverInterface:
+        alias: App\Catalogue\Infrastructure\Integration\CatalogueReservationServiceAdapter
+    App\Order\Application\Port\ReservationCommitterPort:
+        alias: App\Integration\OrderCatalogue\CatalogueReservationCommitterAdapter
+    App\Integration\OrderCatalogue\CatalogueReservationCommitterDriverInterface:
+        alias: App\Catalogue\Infrastructure\Integration\CatalogueReservationCommitterServiceAdapter
