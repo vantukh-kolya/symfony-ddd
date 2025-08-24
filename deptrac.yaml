@@ -63,11 +63,6 @@ deptrac:
                 -   type: classNameRegex
                     value: '#^App\\Catalogue\\Presentation\\#'
         # ---- Doctrine
-        -   name: DoctrineMapping
-            collectors:
-                -   type: classNameRegex
-                    value: '#^Doctrine\\ORM\\Mapping\\#'
-
         -   name: DoctrineInfrastructure
             collectors:
                 -   type: classNameRegex
@@ -75,8 +70,7 @@ deptrac:
 
     ruleset:
         # Shared Kernel
-        SharedDomain:
-            - DoctrineMapping
+        SharedDomain: [ ]
         SharedApplication:
             - SharedDomain
         SharedInfrastructure:
@@ -84,7 +78,7 @@ deptrac:
             - DoctrineInfrastructure
             - Framework
         # Order BC
-        OrderDomain: [ DoctrineMapping,SharedDomain ]
+        OrderDomain: [ SharedDomain ]
         OrderApplication:
             - OrderDomain
             - SharedDomain
@@ -99,7 +93,7 @@ deptrac:
             - SharedApplication
 
         # Catalogue BC
-        CatalogueDomain: [ DoctrineMapping,SharedDomain ]
+        CatalogueDomain: [ SharedDomain ]
         CatalogueApplication:
             - CatalogueDomain
             - SharedDomain
