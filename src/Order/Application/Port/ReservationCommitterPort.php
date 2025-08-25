@@ -2,8 +2,8 @@
 
 namespace App\Order\Application\Port;
 
-use App\SharedKernel\Contracts\Catalogue\Reservation\CommitReservedStockForOrderRequest;
-use App\SharedKernel\Contracts\Catalogue\Reservation\ReservationCommitResult;
+use App\Catalogue\Contracts\Reservation\CommitReservedStockForOrderRequest;
+use App\Catalogue\Contracts\Reservation\ReservationCommitResult;
 
 interface ReservationCommitterPort
 {

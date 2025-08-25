@@ -1,6 +1,6 @@
 <?php
 
-namespace App\SharedKernel\Contracts\Catalogue\Reservation;
+namespace App\Catalogue\Contracts\Reservation;
 
 readonly class ReservationCommitResult
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Catalogue\Infrastructure\Doctrine\Repository;
+namespace App\Catalogue\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\Catalogue\Domain\Entity\Product;
 use App\Catalogue\Domain\Repository\ProductRepositoryInterface;

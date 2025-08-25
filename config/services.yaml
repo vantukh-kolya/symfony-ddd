@@ -21,8 +21,8 @@ services:
     App\Order\Application\Port\ReservationServicePort:
         alias: App\Integration\OrderCatalogue\CatalogueReservationServiceAdapter
     App\Integration\OrderCatalogue\CatalogueReservationDriver:
-        alias: App\Catalogue\Infrastructure\Reservation\DoctrineReservationDriver
+        alias: App\Catalogue\Infrastructure\Adapters\DoctrineReservationDriver
     App\Order\Application\Port\ReservationCommitterPort:
         alias: App\Integration\OrderCatalogue\CatalogueReservationCommitterAdapter
     App\Integration\OrderCatalogue\CatalogueReservationCommitterDriver:
-        alias: App\Catalogue\Infrastructure\Reservation\DoctrineReservationCommitterDriver
+        alias: App\Catalogue\Infrastructure\Adapters\DoctrineReservationCommitterDriver

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\SharedKernel\Infrastructure\Doctrine;
+namespace App\SharedKernel\Infrastructure\Persistence\Doctrine;
 
 use App\SharedKernel\Domain\Persistence\TransactionRunnerInterface;
 use Doctrine\ORM\EntityManagerInterface;

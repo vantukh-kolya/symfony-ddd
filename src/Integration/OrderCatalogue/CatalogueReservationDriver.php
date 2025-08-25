@@ -2,8 +2,8 @@
 
 namespace App\Integration\OrderCatalogue;
 
-use App\SharedKernel\Contracts\Catalogue\Reservation\ReservationResult;
-use App\SharedKernel\Contracts\Catalogue\Reservation\ReserveStockForOrderRequest;
+use App\Catalogue\Contracts\Reservation\ReservationResult;
+use App\Catalogue\Contracts\Reservation\ReserveStockForOrderRequest;
 
 interface CatalogueReservationDriver
 {

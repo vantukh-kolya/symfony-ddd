@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Catalogue\Infrastructure\Reservation;
+namespace App\Catalogue\Infrastructure\Adapters;
 
+use App\Catalogue\Contracts\Reservation\ReservationResult;
+use App\Catalogue\Contracts\Reservation\ReserveStockForOrderRequest;
 use App\Catalogue\Domain\Repository\ProductRepositoryInterface;
-use App\Integration\OrderCatalogue\CatalogueReservationCommitterDriver as ReservationCommitterDriverInterface;
-use App\SharedKernel\Contracts\Catalogue\Reservation\CommitReservedStockForOrderRequest;
-use App\SharedKernel\Contracts\Catalogue\Reservation\ReservationCommitResult;
+use App\Integration\OrderCatalogue\CatalogueReservationDriver as CatalogueReservationDriverInterface;
 use App\SharedKernel\Domain\Persistence\TransactionRunnerInterface;
 
-class DoctrineReservationCommitterDriver implements ReservationCommitterDriverInterface
+class DoctrineReservationDriver implements CatalogueReservationDriverInterface
 {
     public function __construct(private ProductRepositoryInterface $productRepository, private TransactionRunnerInterface $transactionRunner)
     {
     }
 
-    public function reserveByOrder(CommitReservedStockForOrderRequest $request): ReservationCommitResult
+    public function reserveByOrder(ReserveStockForOrderRequest $request): ReservationResult
     {
         try {
             $this->transactionRunner->run(function () use ($request) {
@@ -23,13 +23,12 @@ class DoctrineReservationCommitterDriver implements ReservationCommitterDriverIn
                     if (!$product) {
                         throw new \DomainException('Product not found:' . $item['product_id']);
                     }
-                    $product->commitReservation($item['quantity']);
+                    $product->hold($item['quantity']);
                 }
             });
-            return ReservationCommitResult::ok();
+            return ReservationResult::ok();
         } catch (\DomainException $e) {
-            return ReservationCommitResult::fail($e->getMessage());
+            return ReservationResult::fail($e->getMessage());
         }
     }
-
 }

@@ -2,9 +2,9 @@
 
 namespace App\Integration\OrderCatalogue;
 
+use App\Catalogue\Contracts\Reservation\CommitReservedStockForOrderRequest;
+use App\Catalogue\Contracts\Reservation\ReservationCommitResult;
 use App\Order\Application\Port\ReservationCommitterPort;
-use App\SharedKernel\Contracts\Catalogue\Reservation\CommitReservedStockForOrderRequest;
-use App\SharedKernel\Contracts\Catalogue\Reservation\ReservationCommitResult;
 
 class CatalogueReservationCommitterAdapter implements ReservationCommitterPort
 {

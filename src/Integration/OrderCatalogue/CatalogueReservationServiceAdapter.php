@@ -2,9 +2,9 @@
 
 namespace App\Integration\OrderCatalogue;
 
+use App\Catalogue\Contracts\Reservation\ReservationResult;
+use App\Catalogue\Contracts\Reservation\ReserveStockForOrderRequest;
 use App\Order\Application\Port\ReservationServicePort;
-use App\SharedKernel\Contracts\Catalogue\Reservation\ReservationResult;
-use App\SharedKernel\Contracts\Catalogue\Reservation\ReserveStockForOrderRequest;
 
 class CatalogueReservationServiceAdapter implements ReservationServicePort
 {

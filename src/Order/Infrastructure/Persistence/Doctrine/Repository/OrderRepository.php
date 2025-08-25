@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Order\Infrastructure\Doctrine\Repository;
+namespace App\Order\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\Order\Domain\Entity\Order;
 use App\Order\Domain\Repository\OrderRepositoryInterface;

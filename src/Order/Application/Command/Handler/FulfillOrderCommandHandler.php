@@ -2,9 +2,9 @@
 
 namespace App\Order\Application\Command\Handler;
 
+use App\Catalogue\Contracts\Reservation\CommitReservedStockForOrderRequest;
 use App\Order\Application\Port\ReservationCommitterPort;
 use App\Order\Domain\Repository\OrderRepositoryInterface;
-use App\SharedKernel\Contracts\Catalogue\Reservation\CommitReservedStockForOrderRequest;
 use App\SharedKernel\Domain\Persistence\TransactionRunnerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
