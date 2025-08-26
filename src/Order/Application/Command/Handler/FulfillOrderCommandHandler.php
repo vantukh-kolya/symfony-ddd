@@ -2,7 +2,7 @@
 
 namespace App\Order\Application\Command\Handler;
 
-use App\Catalogue\Contracts\Reservation\CommitReservedStockForOrderRequest;
+use App\Order\Application\Port\Dto\ReservationCommitRequest;
 use App\Order\Application\Port\ReservationCommitterPort;
 use App\Order\Domain\Repository\OrderRepositoryInterface;
 use App\SharedKernel\Domain\Persistence\TransactionRunnerInterface;
@@ -33,8 +33,7 @@ class FulfillOrderCommandHandler
         foreach ($order->getItems() as $i) {
             $items[] = ['product_id' => (string)$i->getProductId(), 'quantity' => $i->getQuantity()];
         }
-        $request = new CommitReservedStockForOrderRequest($order->getId(), $items);
-        $stockFulfillmentResult = $this->stock->commitReservedItemsForOrder($request);
+        $stockFulfillmentResult = $this->stock->commitReservation(new ReservationCommitRequest($order->getId(), $items));
         $this->transactionRunner->run(function () use ($order, $stockFulfillmentResult) {
             if ($stockFulfillmentResult->success) {
                 $order->fulfill();

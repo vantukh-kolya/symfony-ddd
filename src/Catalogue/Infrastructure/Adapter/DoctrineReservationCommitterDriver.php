@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Catalogue\Infrastructure\Adapters;
+namespace App\Catalogue\Infrastructure\Adapter;
 
+use App\Catalogue\Application\Port\CatalogueReservationCommitterDriver as ReservationCommitterDriverInterface;
 use App\Catalogue\Contracts\Reservation\CommitReservedStockForOrderRequest;
 use App\Catalogue\Contracts\Reservation\ReservationCommitResult;
 use App\Catalogue\Domain\Repository\ProductRepositoryInterface;
-use App\Integration\OrderCatalogue\CatalogueReservationCommitterDriver as ReservationCommitterDriverInterface;
 use App\SharedKernel\Domain\Persistence\TransactionRunnerInterface;
 
 class DoctrineReservationCommitterDriver implements ReservationCommitterDriverInterface

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Integration\OrderCatalogue;
+namespace App\Catalogue\Application\Port;
 
 use App\Catalogue\Contracts\Reservation\CommitReservedStockForOrderRequest;
 use App\Catalogue\Contracts\Reservation\ReservationCommitResult;

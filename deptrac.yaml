@@ -42,6 +42,11 @@ deptrac:
                 -   type: classNameRegex
                     value: '#^App\\Order\\Presentation\\#'
 
+        -   name: OrderIntegration
+            collectors:
+                -   type: classNameRegex
+                    value: '#^App\\Integration\\OrderCatalogue\\#'
+
         # ---- Catalogue BC
         -   name: CatalogueDomain
             collectors:
@@ -62,7 +67,13 @@ deptrac:
             collectors:
                 -   type: classNameRegex
                     value: '#^App\\Catalogue\\Presentation\\#'
-        # ---- Doctrine
+
+        -   name: CatalogueContracts
+            collectors:
+                -   type: classNameRegex
+                    value: '#^App\\Catalogue\\Contracts\\#'
+
+        # ---- Doctrine (3rd-party)
         -   name: DoctrineInfrastructure
             collectors:
                 -   type: classNameRegex
@@ -70,27 +81,26 @@ deptrac:
 
     ruleset:
         # Shared Kernel
-        SharedDomain: [ ]
-        SharedApplication:
-            - SharedDomain
+        SharedDomain: [ ]                             # must be dependency-free
+        SharedApplication: [ SharedDomain ]           # orchestrates shared use-cases
         SharedInfrastructure:
             - SharedDomain
-            - DoctrineInfrastructure
-            - Framework
+            - DoctrineInfrastructure                  # persistence/runtime plumbing
+
         # Order BC
-        OrderDomain: [ SharedDomain ]
+        OrderDomain: [ SharedDomain ]                 # pure domain, only depends on shared primitives
         OrderApplication:
             - OrderDomain
             - SharedDomain
-            - SharedApplication
+            - SharedApplication                       # use-cases, ports, no cross-BC deps
         OrderInfrastructure:
             - OrderDomain
             - SharedDomain
             - DoctrineInfrastructure
-            - SharedInfrastructure
+            - SharedInfrastructure                    # impl of ports, persistence, etc.
         OrderPresentation:
             - OrderApplication
-            - SharedApplication
+            - SharedApplication                       # controllers, CLI, UI; only call application
 
         # Catalogue BC
         CatalogueDomain: [ SharedDomain ]
@@ -98,14 +108,25 @@ deptrac:
             - CatalogueDomain
             - SharedDomain
             - SharedApplication
+            - CatalogueContracts                      # application can consume its own published language
         CatalogueInfrastructure:
             - CatalogueDomain
+            - CatalogueApplication
             - SharedDomain
             - DoctrineInfrastructure
             - SharedInfrastructure
+            - CatalogueContracts
         CataloguePresentation:
             - CatalogueApplication
             - SharedApplication
+
+        # Cross-BC boundary
+        OrderIntegration:
+            - OrderApplication                        # implements Order ports
+            - CatalogueApplication                    # calls Catalogue ports
+            - CatalogueContracts                      # maps to published language
+            - SharedApplication
+        CatalogueContracts: [ SharedApplication, SharedDomain ] # must stay minimal, only shared types
 
     analyser:
         types:

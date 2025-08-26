@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Order\Application\Dto;
+namespace App\Order\Application\Port\Dto;
 
-final class OrderReservationResult
+final class ReservationResult
 {
     public function __construct(
         public readonly bool $success,

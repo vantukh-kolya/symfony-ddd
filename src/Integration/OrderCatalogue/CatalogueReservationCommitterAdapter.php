@@ -2,19 +2,26 @@
 
 namespace App\Integration\OrderCatalogue;
 
+use App\Catalogue\Application\Port\CatalogueReservationCommitterDriver;
 use App\Catalogue\Contracts\Reservation\CommitReservedStockForOrderRequest;
-use App\Catalogue\Contracts\Reservation\ReservationCommitResult;
+use App\Order\Application\Port\Dto\ReservationCommitRequest;
+use App\Order\Application\Port\Dto\ReservationCommitResult;
 use App\Order\Application\Port\ReservationCommitterPort;
 
 class CatalogueReservationCommitterAdapter implements ReservationCommitterPort
 {
-    public function __construct(private CatalogueReservationCommitterDriver $reservationCommitterDriver)
+    public function __construct(private CatalogueReservationCommitterDriver $committerDriver)
     {
     }
 
-    public function commitReservedItemsForOrder(CommitReservedStockForOrderRequest $request): ReservationCommitResult
+    public function commitReservation(ReservationCommitRequest $request): ReservationCommitResult
     {
-        return $this->reservationCommitterDriver->reserveByOrder($request);
+        $catalogueRequest = new CommitReservedStockForOrderRequest(
+            $request->orderId,
+            array_map(fn($i) => ['product_id' => $i['product_id'], 'quantity' => $i['quantity']], $request->items)
+        );
+        $catRes = $this->committerDriver->reserveByOrder($catalogueRequest);
+        return $catRes->success ? ReservationCommitResult::ok() : ReservationCommitResult::fail($catRes->reason);
     }
 
 }

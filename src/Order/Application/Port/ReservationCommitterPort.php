@@ -2,10 +2,10 @@
 
 namespace App\Order\Application\Port;
 
-use App\Catalogue\Contracts\Reservation\CommitReservedStockForOrderRequest;
-use App\Catalogue\Contracts\Reservation\ReservationCommitResult;
+use App\Order\Application\Port\Dto\ReservationCommitRequest;
+use App\Order\Application\Port\Dto\ReservationCommitResult;
 
 interface ReservationCommitterPort
 {
-    public function commitReservedItemsForOrder(CommitReservedStockForOrderRequest $request): ReservationCommitResult;
+    public function commitReservation(ReservationCommitRequest $request): ReservationCommitResult;
 }
