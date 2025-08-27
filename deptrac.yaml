@@ -40,7 +40,7 @@ deptrac:
         -   name: OrderIntegration
             collectors:
                 -   type: classNameRegex
-                    value: '#^App\\Integration\\OrderCatalogue\\#'
+                    value: '#^App\\Order\\Integration\\#'
 
         # ---- Catalogue BC
         -   name: CatalogueDomain
