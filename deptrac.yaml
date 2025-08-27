@@ -116,5 +116,4 @@ deptrac:
             - CatalogueContracts                      # maps to published language
 
     analyser:
-        types:
-            - class
+        types: [ class, use, function_call ]

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Integration\OrderCatalogue;
+namespace App\Order\Integration\OrderCatalogue;
 
 use App\Catalogue\Contracts\Reservation\ReservationApi;
 use App\Catalogue\Contracts\Reservation\ReserveStockForOrderRequest;

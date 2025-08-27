@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Integration\OrderCatalogue;
+namespace App\Order\Integration\OrderCatalogue;
 
-use App\Catalogue\Contracts\Reservation\ReservationCommitterApi;
 use App\Catalogue\Contracts\Reservation\CommitReservedStockForOrderRequest;
+use App\Catalogue\Contracts\Reservation\ReservationCommitterApi;
 use App\Order\Application\Port\Dto\ReservationCommitRequest;
 use App\Order\Application\Port\Dto\ReservationCommitResult;
 use App\Order\Application\Port\ReservationCommitterPort;
