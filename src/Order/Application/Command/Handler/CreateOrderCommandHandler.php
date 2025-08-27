@@ -16,7 +16,7 @@ class CreateOrderCommandHandler
     public function __construct(
         private OrderRepositoryInterface $orderRepository,
         private TransactionRunnerInterface $transactionRunner,
-        private StockReservationPort $productReservation
+        private StockReservationPort $reservation
     ) {
     }
 
@@ -49,7 +49,7 @@ class CreateOrderCommandHandler
         foreach ($order->getItems() as $i) {
             $items[] = ['product_id' => (string)$i->getProductId(), 'quantity' => $i->getQuantity()];
         }
-        $reservationResult = $this->productReservation->reserve(new ReservationRequest($order->getId(), $items));
+        $reservationResult = $this->reservation->reserve(new ReservationRequest($order->getId(), $items));
         $this->transactionRunner->run(function () use ($order, $reservationResult) {
             if ($reservationResult->success) {
                 $order->setReserved();

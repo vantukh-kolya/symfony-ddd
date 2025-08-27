@@ -11,11 +11,6 @@ deptrac:
                 -   type: classNameRegex
                     value: '#^App\\SharedKernel\\Domain\\#'
 
-        -   name: SharedApplication
-            collectors:
-                -   type: classNameRegex
-                    value: '#^App\\SharedKernel\\Application\\#'
-
         -   name: SharedInfrastructure
             collectors:
                 -   type: classNameRegex
@@ -82,7 +77,6 @@ deptrac:
     ruleset:
         # Shared Kernel
         SharedDomain: [ ]                             # must be dependency-free
-        SharedApplication: [ SharedDomain ]           # orchestrates shared use-cases
         SharedInfrastructure:
             - SharedDomain
             - DoctrineInfrastructure                  # persistence/runtime plumbing
@@ -92,7 +86,6 @@ deptrac:
         OrderApplication:
             - OrderDomain
             - SharedDomain
-            - SharedApplication                       # use-cases, ports, no cross-BC deps
         OrderInfrastructure:
             - OrderDomain
             - SharedDomain
@@ -100,15 +93,13 @@ deptrac:
             - SharedInfrastructure                    # impl of ports, persistence, etc.
         OrderPresentation:
             - OrderApplication
-            - SharedApplication                       # controllers, CLI, UI; only call application
 
         # Catalogue BC
         CatalogueDomain: [ SharedDomain ]
         CatalogueApplication:
             - CatalogueDomain
             - SharedDomain
-            - SharedApplication
-            - CatalogueContracts                      # application can consume its own published language
+
         CatalogueInfrastructure:
             - CatalogueDomain
             - CatalogueApplication
@@ -118,15 +109,11 @@ deptrac:
             - CatalogueContracts
         CataloguePresentation:
             - CatalogueApplication
-            - SharedApplication
 
         # Cross-BC boundary
         OrderIntegration:
             - OrderApplication                        # implements Order ports
-            - CatalogueApplication                    # calls Catalogue ports
             - CatalogueContracts                      # maps to published language
-            - SharedApplication
-        CatalogueContracts: [ SharedApplication, SharedDomain ] # must stay minimal, only shared types
 
     analyser:
         types:

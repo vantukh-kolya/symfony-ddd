@@ -2,19 +2,19 @@
 
 namespace App\Catalogue\Infrastructure\Adapter;
 
-use App\Catalogue\Application\Port\CatalogueReservationDriver as CatalogueReservationDriverInterface;
-use App\Catalogue\Contracts\Reservation\ReservationResult;
-use App\Catalogue\Contracts\Reservation\ReserveStockForOrderRequest;
+use App\Catalogue\Contracts\Reservation\ReservationCommitterApi as ReservationCommitterApiInterface;
+use App\Catalogue\Contracts\Reservation\CommitReservedStockForOrderRequest;
+use App\Catalogue\Contracts\Reservation\ReservationCommitResult;
 use App\Catalogue\Domain\Repository\ProductRepositoryInterface;
 use App\SharedKernel\Domain\Persistence\TransactionRunnerInterface;
 
-class DoctrineReservationDriver implements CatalogueReservationDriverInterface
+class DoctrineReservationCommitterApi implements ReservationCommitterApiInterface
 {
     public function __construct(private ProductRepositoryInterface $productRepository, private TransactionRunnerInterface $transactionRunner)
     {
     }
 
-    public function reserveByOrder(ReserveStockForOrderRequest $request): ReservationResult
+    public function commitReservedStockForOrder(CommitReservedStockForOrderRequest $request): ReservationCommitResult
     {
         try {
             $this->transactionRunner->run(function () use ($request) {
@@ -23,12 +23,13 @@ class DoctrineReservationDriver implements CatalogueReservationDriverInterface
                     if (!$product) {
                         throw new \DomainException('Product not found:' . $item['product_id']);
                     }
-                    $product->hold($item['quantity']);
+                    $product->commitReservation($item['quantity']);
                 }
             });
-            return ReservationResult::ok();
+            return ReservationCommitResult::ok();
         } catch (\DomainException $e) {
-            return ReservationResult::fail($e->getMessage());
+            return ReservationCommitResult::fail($e->getMessage());
         }
     }
+
 }
