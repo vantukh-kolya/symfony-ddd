@@ -15,7 +15,7 @@ class DoctrineTransactionRunner implements TransactionRunnerInterface
 
     public function run(callable $callback)
     {
-        return $this->entityManager->wrapInTransaction(function () use ($callback) {
+        return $this->entityManager->getConnection()->transactional(function () use ($callback) {
             $result = $callback();
             $this->entityManager->flush();
             return $result;

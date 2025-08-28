@@ -37,3 +37,41 @@ App\Order\Application\Command\CreateOrderCommand:
                                 price:
                                     -   NotBlank: ~
                                     -   Positive: ~
+App\Catalogue\Application\Command\ReserveStockForOrderCommand:
+    properties:
+        orderId:
+            -   Type: string
+            -   NotBlank: ~
+        items:
+            -   Type: array
+            -   NotBlank: ~
+            -   All:
+                    -   Collection:
+                            allowExtraFields: false
+                            allowMissingFields: false
+                            fields:
+                                product_id:
+                                    -   NotBlank: ~
+                                    -   Type: string
+                                quantity:
+                                    -   NotNull: ~
+                                    -   Positive: ~
+App\Catalogue\Application\Command\CommitReservedStockForOrderCommand:
+    properties:
+        orderId:
+            -   Type: string
+            -   NotBlank: ~
+        items:
+            -   Type: array
+            -   NotBlank: ~
+            -   All:
+                    -   Collection:
+                            allowExtraFields: false
+                            allowMissingFields: false
+                            fields:
+                                product_id:
+                                    -   NotBlank: ~
+                                    -   Type: string
+                                quantity:
+                                    -   NotNull: ~
+                                    -   Positive: ~

@@ -24,7 +24,7 @@ class StockReservationService implements ReservationService
                 ($this->handler)($command);
                 return ReservationResult::ok();
             } else {
-                ReservationResult::fail("Invalid request");
+                return ReservationResult::fail("Invalid request");
             }
         } catch (\Throwable $e) {
             return ReservationResult::fail($e->getMessage());

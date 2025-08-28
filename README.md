@@ -112,6 +112,33 @@ Catalogue validates request and holds product stock.
 - **CatalogueContracts** defines the Published Language.
 - This decouples Order from Catalogue’s internals. If Catalogue is extracted into a microservice (REST/Message broker), Order only needs to re-wire the adapter.
 
+## Command / Handler Architecture
+
+The Application layer follows a **Command/Handler** structure **without a command bus or Messenger**:
+
+- **Commands** are simple DTOs carrying scalar input data (e.g. `CreateOrderCommand`).
+- **Handlers** are invoked directly (e.g. `$handler($command)`), no bus in between.
+- Controllers (or OHS services) construct the Command, validate it, and call the Handler.
+- This keeps use-cases explicit and easy to trace while avoiding unnecessary infrastructure overhead.
+
+---
+
+## Application Layer: Commands & Queries
+
+The Application layer is organized around **explicit use-cases** that act as **entry points into the application**:
+
+- **Command/Handler (write side)**
+    - Commands are simple DTOs with scalar input (e.g. `CreateOrderCommand`).
+    - Handlers orchestrate Domain operations and run inside a transaction.
+    - Example: creating an order, reserving stock.
+
+- **Query/Handler (read side)**
+    - Queries are DTOs describing a read request (e.g. `GetOrderByIdQuery`).
+    - Handlers fetch and return DTOs/arrays optimized for presentation.
+    - Example: fetching order details, listing catalogue products.
+
+Controllers or OHS services construct a Command/Query and invoke its Handler directly.  
+This makes **Application Handlers the clear entry points for all business use-cases**, while keeping the Domain isolated and pure.
 ## Tech Stack
 
 - PHP 8.3
