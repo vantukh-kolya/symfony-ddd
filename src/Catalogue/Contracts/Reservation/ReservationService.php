@@ -2,7 +2,7 @@
 
 namespace App\Catalogue\Contracts\Reservation;
 
-interface ReservationApi
+interface ReservationService
 {
     public function reserveStockForOrder(ReserveStockForOrderRequest $request): ReservationResult;
 }

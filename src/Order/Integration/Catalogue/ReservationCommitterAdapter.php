@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Order\Integration\OrderCatalogue;
+namespace App\Order\Integration\Catalogue;
 
 use App\Catalogue\Contracts\Reservation\CommitReservedStockForOrderRequest;
-use App\Catalogue\Contracts\Reservation\ReservationCommitterApi;
+use App\Catalogue\Contracts\Reservation\ReservationCommitterService;
 use App\Order\Application\Port\Dto\ReservationCommitRequest;
 use App\Order\Application\Port\Dto\ReservationCommitResult;
 use App\Order\Application\Port\ReservationCommitterPort;
 
-class CatalogueReservationCommitterAdapter implements ReservationCommitterPort
+class ReservationCommitterAdapter implements ReservationCommitterPort
 {
-    public function __construct(private ReservationCommitterApi $reservationCommitterApi)
+    public function __construct(private ReservationCommitterService $reservationCommitterApi)
     {
     }
 

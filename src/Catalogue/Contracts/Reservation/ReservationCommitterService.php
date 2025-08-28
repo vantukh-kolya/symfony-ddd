@@ -2,7 +2,7 @@
 
 namespace App\Catalogue\Contracts\Reservation;
 
-interface ReservationCommitterApi
+interface ReservationCommitterService
 {
     public function commitReservedStockForOrder(CommitReservedStockForOrderRequest $request): ReservationCommitResult;
 }
