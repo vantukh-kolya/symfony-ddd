@@ -1,0 +1,39 @@
+App\Catalogue\Application\Command\CreateProductCommand:
+    properties:
+        name:
+            -   NotBlank: ~
+            -   Type: string
+
+        price:
+            -   NotNull: ~
+            -   Type: integer
+            -   GreaterThanOrEqual:
+                    value: 0
+
+        onHand:
+            -   NotNull: ~
+            -   Type: integer
+            -   GreaterThanOrEqual:
+                    value: 0
+App\Order\Application\Command\CreateOrderCommand:
+    properties:
+        amountToPay:
+            -   Type: integer
+            -   NotBlank: ~
+            -   Positive: ~
+
+        products:
+            -   Type: array
+            -   NotBlank: ~
+            -   All:
+                    -   Collection:
+                            fields:
+                                product_id:
+                                    -   NotBlank: ~
+                                    -   Type: string
+                                quantity:
+                                    -   NotBlank: ~
+                                    -   Positive: ~
+                                price:
+                                    -   NotBlank: ~
+                                    -   Positive: ~

@@ -5,25 +5,17 @@ namespace App\Order\Domain\Entity;
 use App\Order\Domain\Enum\OrderStatus;
 use App\Order\Domain\ValueObject\OrderLine;
 use App\SharedKernel\Domain\ValueObject\Money;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Uid\Uuid;
 
 class Order
 {
-    public function __construct()
-    {
-        $this->items = new ArrayCollection();
-    }
-
     private string $id;
     private int $amountToPay;
     private string $status;
     private \DateTime $createdAt;
     private ?\DateTime $fulfilledAt = null;
-    private Collection $items;
+    private iterable $items = [];
 
-    public static function create(Money $amountToPay, OrderLine ...$lines): self
+    public static function create(string $id, Money $amountToPay, OrderLine ...$lines): self
     {
         $amountToPayValue = $amountToPay->toInt();
         if ($amountToPayValue <= 0) {
@@ -31,15 +23,13 @@ class Order
         }
 
         $order = new self();
-        $order->id = Uuid::v7();
+        $order->id = $id;
         $order->amountToPay = $amountToPayValue;
         $order->status = OrderStatus::PENDING->value;
         $order->createdAt = new \DateTime();
 
         foreach ($lines as $l) {
-            $order->items->add(
-                OrderItem::create($order, $l->productId(), $l->quantity(), $l->price()->toInt())
-            );
+            $order->items[] = OrderItem::create($order, $l->productId(), $l->quantity(), $l->price()->toInt());
         }
 
         return $order;

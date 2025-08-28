@@ -6,7 +6,6 @@ use App\Order\Application\Port\Dto\ReservationCommitRequest;
 use App\Order\Application\Port\ReservationCommitterPort;
 use App\Order\Domain\Repository\OrderRepositoryInterface;
 use App\SharedKernel\Domain\Persistence\TransactionRunnerInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class FulfillOrderCommandHandler
 {
@@ -21,7 +20,7 @@ class FulfillOrderCommandHandler
     {
         $order = $this->orderRepository->get($orderId);
         if (!$order) {
-            throw new NotFoundHttpException();
+            throw new \DomainException("Order not found");
         }
         if ($order->isFulfilled()) {
             throw new \DomainException("Order already fulfilled");

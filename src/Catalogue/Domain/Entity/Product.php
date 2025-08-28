@@ -3,7 +3,6 @@
 namespace App\Catalogue\Domain\Entity;
 
 use App\SharedKernel\Domain\ValueObject\Money;
-use Symfony\Component\Uid\Uuid;
 
 class Product
 {
@@ -14,13 +13,13 @@ class Product
     private int $onHand = 0;
     private int $onHold = 0;
 
-    public static function create(string $name, Money $price, int $onHand): self
+    public static function create(string $id, string $name, Money $price, int $onHand): self
     {
         if ($name === '') {
             throw new \InvalidArgumentException('Name required.');
         }
         $product = new self();
-        $product->id = Uuid::v7()->toString();
+        $product->id = $id;
         $product->name = $name;
         $product->price = $price->toInt();
         $product->onHand = $onHand;

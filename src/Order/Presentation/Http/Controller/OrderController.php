@@ -9,6 +9,7 @@ use App\Order\Presentation\Http\HttpResponseFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/orders')]
@@ -21,7 +22,7 @@ class OrderController
     #[Route('', name: 'orders.create', methods: ['POST'])]
     public function create(CreateOrderCommandHandler $handler, Request $request, ValidatorInterface $validator): JsonResponse
     {
-        $command = new CreateOrderCommand($request->get('amount_to_pay', 0), $request->get('products', []));
+        $command = new CreateOrderCommand(Uuid::v7()->toString(), $request->get('amount_to_pay', 0), $request->get('products', []));
         $errors = $validator->validate($command);
         if ($errors->count() === 0) {
             $order = $handler($command);

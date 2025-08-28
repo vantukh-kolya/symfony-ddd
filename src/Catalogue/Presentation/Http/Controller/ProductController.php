@@ -10,6 +10,7 @@ use App\Catalogue\Presentation\Http\HttpResponseFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/products')]
@@ -28,7 +29,7 @@ class ProductController
     #[Route('', name: 'products.create', methods: ['POST'])]
     public function create(CreateProductCommandHandler $handler, Request $request, ValidatorInterface $validator): JsonResponse
     {
-        $command = new CreateProductCommand($request->get('name', ''), $request->get('price', 0), $request->get('on_hand', 0));
+        $command = new CreateProductCommand(Uuid::v7()->toString(),$request->get('name', ''), $request->get('price', 0), $request->get('on_hand', 0));
         $errors = $validator->validate($command);
         if ($errors->count() === 0) {
             $product = $handler($command);

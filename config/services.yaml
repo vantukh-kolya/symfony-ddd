@@ -21,8 +21,8 @@ services:
     App\Order\Application\Port\StockReservationPort:
         alias: App\Order\Integration\Catalogue\StockReservationAdapter
     App\Catalogue\Contracts\Reservation\ReservationService:
-        alias: App\Catalogue\Application\Ohs\StockReservationService
+        alias: App\Catalogue\Infrastructure\Ohs\StockReservationService
     App\Order\Application\Port\ReservationCommitterPort:
         alias: App\Order\Integration\Catalogue\ReservationCommitterAdapter
     App\Catalogue\Contracts\Reservation\ReservationCommitterService:
-        alias: App\Catalogue\Application\Ohs\StockReservationCommitterAdapter
+        alias: App\Catalogue\Infrastructure\Ohs\StockReservationCommitterService

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Catalogue\Application\Ohs;
+namespace App\Catalogue\Infrastructure\Ohs;
 
 use App\Catalogue\Application\Command\CommitReservedStockForOrderCommand;
 use App\Catalogue\Application\Command\Handler\CommitReservedStockForOrderCommandHandler;
