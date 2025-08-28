@@ -5,7 +5,7 @@ deptrac:
         - '#/Tests/#'
 
     layers:
-        # ---- Shared Kernel
+        # ---- Shared Kernel (shared primitives, value objects, cross-cutting domain services)
         -   name: SharedDomain
             collectors:
                 -   type: classNameRegex
@@ -17,26 +17,34 @@ deptrac:
                     value: '#^App\\SharedKernel\\Infrastructure\\#'
 
         # ---- Order BC
+        # Domain: pure domain model, no framework or persistence dependencies
         -   name: OrderDomain
             collectors:
                 -   type: classNameRegex
                     value: '#^App\\Order\\Domain\\#'
 
+        # Application: use-cases (Commands, Handlers, Ports).
+        # Orchestrates domain logic and external services via ports.
         -   name: OrderApplication
             collectors:
                 -   type: classNameRegex
                     value: '#^App\\Order\\Application\\#'
 
+        # Infrastructure: port implementations, persistence, messaging,
+        # technical integration with Doctrine/Symfony/etc.
         -   name: OrderInfrastructure
             collectors:
                 -   type: classNameRegex
                     value: '#^App\\Order\\Infrastructure\\#'
 
+        # Presentation: HTTP controllers, CLI commands, GraphQL endpoints.
+        # Entry points only, delegating to Application.
         -   name: OrderPresentation
             collectors:
                 -   type: classNameRegex
                     value: '#^App\\Order\\Presentation\\#'
 
+        # Integration: ACL layer for interaction with other bounded contexts (e.g., Catalogue)
         -   name: OrderIntegration
             collectors:
                 -   type: classNameRegex
@@ -63,29 +71,33 @@ deptrac:
                 -   type: classNameRegex
                     value: '#^App\\Catalogue\\Presentation\\#'
 
+        # Contracts = Published Language. DTOs / interfaces shared with other BCs or external systems.
         -   name: CatalogueContracts
             collectors:
                 -   type: classNameRegex
                     value: '#^App\\Catalogue\\Contracts\\#'
 
-        # ---- Doctrine (3rd-party)
+        # ---- Third-party layers
         -   name: Doctrine
             collectors:
                 -   type: classNameRegex
                     value: '#^Doctrine\\#'
+
         -   name: Framework
             collectors:
                 -   type: classNameRegex
                     value: '#^Symfony\\#'
+
     ruleset:
         # Shared Kernel
-        SharedDomain: [ ]                             # must be dependency-free
+        SharedDomain: [ ]   # must stay dependency-free
         SharedInfrastructure:
             - SharedDomain
-            - Doctrine                  # persistence/runtime plumbing
-            - Framework
+            - Doctrine        # persistence/runtime plumbing
+            - Framework       # technical details (logging, DI, etc.)
+
         # Order BC
-        OrderDomain: [ SharedDomain ]                 # pure domain, only depends on shared primitives
+        OrderDomain: [ SharedDomain ]   # pure domain, only depends on shared primitives
         OrderApplication:
             - OrderDomain
             - SharedDomain
@@ -93,17 +105,21 @@ deptrac:
             - OrderDomain
             - SharedDomain
             - Doctrine
-            - SharedInfrastructure                    # impl of ports, persistence, etc.
+            - SharedInfrastructure
             - Framework
         OrderPresentation:
             - OrderApplication
             - Framework
+        OrderIntegration:
+            - OrderApplication
+            - CatalogueContracts   # ACL depends only on published language of other BC
+
         # Catalogue BC
         CatalogueDomain: [ SharedDomain ]
         CatalogueApplication:
             - CatalogueDomain
             - SharedDomain
-            - CatalogueContracts
+            - CatalogueContracts   # Application may see its own Contracts (OHS)
         CatalogueInfrastructure:
             - CatalogueDomain
             - CatalogueApplication
@@ -115,10 +131,6 @@ deptrac:
         CataloguePresentation:
             - CatalogueApplication
             - Framework
-        # Cross-BC boundary
-        OrderIntegration:
-            - OrderApplication                        # implements Order ports
-            - CatalogueContracts                      # maps to published language
 
     analyser:
         types: [ class, use, function_call ]
