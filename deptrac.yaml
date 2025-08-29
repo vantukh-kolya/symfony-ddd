@@ -1,3 +1,21 @@
+# ============================================================================
+# Deptrac configuration for Symfony DDD demo
+#
+# Purpose:
+#   - Enforce strict architectural boundaries between layers and bounded contexts.
+#   - Protect pure Domain layers from any framework, persistence, or integration leakage.
+#   - Document allowed dependencies explicitly.
+#
+# Notes:
+#   - Rule summary:
+#       * Presentation → Application only
+#       * Application → Domain (+ Shared, own Contracts)
+#       * Domain → SharedDomain only
+#       * Infrastructure → Domain/Application/Shared/Doctrine/Framework
+#       * Integration → Application + Contracts of other BCs
+#       * SharedDomain must remain dependency-free
+# ============================================================================
+
 deptrac:
     paths:
         - ./src
@@ -5,99 +23,121 @@ deptrac:
         - '#/Tests/#'
 
     layers:
-        # ---- Shared Kernel (shared primitives, value objects, cross-cutting domain services)
+        # ---- Shared Kernel (cross-cutting primitives and domain-safe services)
+
         -   name: SharedDomain
             collectors:
                 -   type: classNameRegex
                     value: '#^App\\SharedKernel\\Domain\\#'
+            # Contains primitives, value objects, cross-cutting domain services.
+            # Must remain dependency-free (no Symfony, Doctrine, or infrastructure).
 
         -   name: SharedInfrastructure
             collectors:
                 -   type: classNameRegex
                     value: '#^App\\SharedKernel\\Infrastructure\\#'
+            # Technical services shared between BCs (persistence plumbing, logging, DI, etc.).
+            # Depends on SharedDomain, Doctrine, and Framework.
 
-        # ---- Order BC
-        # Domain: pure domain model, no framework or persistence dependencies
+        # ---- Order Bounded Context
+
         -   name: OrderDomain
             collectors:
                 -   type: classNameRegex
                     value: '#^App\\Order\\Domain\\#'
+            # Pure domain model for Order BC.
+            # No external dependencies allowed except SharedDomain.
 
-        # Application: use-cases (Commands, Handlers, Ports).
-        # Orchestrates domain logic and external services via ports.
         -   name: OrderApplication
             collectors:
                 -   type: classNameRegex
                     value: '#^App\\Order\\Application\\#'
+            # Use cases, commands, handlers, and ports.
+            # Orchestrates domain logic and calls out to infrastructure through ports.
 
-        # Infrastructure: port implementations, persistence, messaging,
-        # technical integration with Doctrine/Symfony/etc.
         -   name: OrderInfrastructure
             collectors:
                 -   type: classNameRegex
                     value: '#^App\\Order\\Infrastructure\\#'
+            # Technical details: Doctrine mappings, persistence adapters,
+            # messaging implementations, Symfony integration, etc.
+            # May depend on Domain, Shared, Doctrine, and Framework.
 
-        # Presentation: HTTP controllers, CLI commands, GraphQL endpoints.
-        # Entry points only, delegating to Application.
         -   name: OrderPresentation
             collectors:
                 -   type: classNameRegex
                     value: '#^App\\Order\\Presentation\\#'
+            # Entry points only (HTTP controllers, CLI, GraphQL).
+            # Must delegate immediately to Application layer.
 
-        # Integration: ACL layer for interaction with other bounded contexts (e.g., Catalogue)
         -   name: OrderIntegration
             collectors:
                 -   type: classNameRegex
                     value: '#^App\\Order\\Integration\\#'
+            # Anti-corruption layer for communication with other bounded contexts.
+            # Allowed to depend only on own Application and foreign *Contracts*.
 
-        # ---- Catalogue BC
+        # ---- Catalogue Bounded Context
+
         -   name: CatalogueDomain
             collectors:
                 -   type: classNameRegex
                     value: '#^App\\Catalogue\\Domain\\#'
+            # Pure domain model for Catalogue BC.
+            # Depends only on SharedDomain.
 
         -   name: CatalogueApplication
             collectors:
                 -   type: classNameRegex
                     value: '#^App\\Catalogue\\Application\\#'
+            # Use cases, commands, handlers, ports.
+            # Allowed to see CatalogueDomain, SharedDomain, and its own Contracts (OHS).
 
         -   name: CatalogueInfrastructure
             collectors:
                 -   type: classNameRegex
                     value: '#^App\\Catalogue\\Infrastructure\\#'
+            # Technical details for Catalogue (Doctrine persistence, Symfony services, etc.).
+            # May depend on Domain, Application, Shared, Doctrine, Framework, and Contracts.
 
         -   name: CataloguePresentation
             collectors:
                 -   type: classNameRegex
                     value: '#^App\\Catalogue\\Presentation\\#'
+            # Entry points (controllers, CLI, etc.).
+            # Must delegate to Application only.
 
-        # Contracts = Published Language. DTOs / interfaces shared with other BCs or external systems.
         -   name: CatalogueContracts
             collectors:
                 -   type: classNameRegex
                     value: '#^App\\Catalogue\\Contracts\\#'
+            # Published Language of the Catalogue BC.
+            # Other BCs integrate through these DTOs / interfaces, not internals.
 
         # ---- Third-party layers
+
         -   name: Doctrine
             collectors:
                 -   type: classNameRegex
                     value: '#^Doctrine\\#'
+            # Doctrine ORM and DBAL classes. Allowed only in Infrastructure.
 
         -   name: Framework
             collectors:
                 -   type: classNameRegex
                     value: '#^Symfony\\#'
+            # Symfony framework classes. Allowed only in Infrastructure and Presentation.
 
     ruleset:
         # Shared Kernel
-        SharedDomain: [ ]   # must stay dependency-free
+        SharedDomain: [ ]   # Must stay dependency-free
         SharedInfrastructure:
             - SharedDomain
-            - Doctrine        # persistence/runtime plumbing
-            - Framework       # technical details (logging, DI, etc.)
+            - Doctrine        # Persistence/runtime plumbing
+            - Framework       # Technical details (logging, DI, etc.)
 
         # Order BC
-        OrderDomain: [ SharedDomain ]   # pure domain, only depends on shared primitives
+        OrderDomain: [ SharedDomain ]
         OrderApplication:
             - OrderDomain
             - SharedDomain
@@ -134,3 +174,4 @@ deptrac:
 
     analyser:
         types: [ class, use, function_call ]
+
