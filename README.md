@@ -1,6 +1,6 @@
 # Symfony 7 DDD Demo Project
 
-![Tests](https://github.com/vantukh-kolya/symfony-ddd/actions/workflows/app.yml/badge.svg?branch=main&label=tests)
+![Tests](https://github.com/vantukh-kolya/symfony-ddd/actions/workflows/app.yml/badge.svg)
 
 This repository is a **Symfony 7 demo project** built to showcase **Domain-Driven Design (DDD)**, **Clean Architecture**, and strict **dependency rules** enforced by [Deptrac](https://github.com/qossmic/deptrac).  
 It is not a production system - the goal is to demonstrate architecture in Symfony app.
