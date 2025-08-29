@@ -1,4 +1,4 @@
-name: Symfony CI
+name: CI
 
 on:
     push:
