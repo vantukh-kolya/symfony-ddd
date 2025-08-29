@@ -2,6 +2,10 @@
 
 namespace App\Catalogue\Domain\Entity;
 
+use App\Catalogue\Domain\Exception\EmptyProductNameException;
+use App\Catalogue\Domain\Exception\InsufficientStockException;
+use App\Catalogue\Domain\Exception\NonPositiveQuantityException;
+use App\Catalogue\Domain\Exception\OverCommitReservationException;
 use App\SharedKernel\Domain\ValueObject\Money;
 
 class Product
@@ -16,15 +20,38 @@ class Product
     public static function create(string $id, string $name, Money $price, int $onHand): self
     {
         if ($name === '') {
-            throw new \InvalidArgumentException('Name required.');
+            throw new EmptyProductNameException('Name required.');
         }
-        $product = new self();
-        $product->id = $id;
-        $product->name = $name;
-        $product->price = $price->toInt();
-        $product->onHand = $onHand;
+        $self = new self();
+        $self->id = $id;
+        $self->name = $name;
+        $self->price = $price->toInt();
+        $self->onHand = $onHand;
+        return $self;
+    }
 
-        return $product;
+    public function hold(int $qty): void
+    {
+        if ($qty <= 0) {
+            throw new NonPositiveQuantityException('Quantity must be > 0.');
+        }
+        if ($qty > $this->getAvailable()) {
+            throw new InsufficientStockException('Not enough stock available to hold.');
+        }
+        $this->onHold += $qty;
+    }
+
+    public function commitReservation(int $qty): void
+    {
+        if ($qty <= 0) {
+            throw new NonPositiveQuantityException('Quantity must be > 0.');
+        }
+        if ($qty > $this->onHold) {
+            throw new OverCommitReservationException('Cannot commit more than reserved.');
+        }
+
+        $this->onHold -= $qty;
+        $this->onHand -= $qty;
     }
 
     public function getName(): string
@@ -52,32 +79,6 @@ class Product
         return $this->onHold;
     }
 
-    public function hold(int $qty): void
-    {
-        if ($qty <= 0) {
-            throw new \InvalidArgumentException('Quantity must be > 0.');
-        }
-        if ($qty > $this->getAvailable()) {
-            throw new \LogicException('Not enough stock available to hold.');
-        }
-        $this->onHold += $qty;
-    }
-
-    public function commitReservation(int $qty): void
-    {
-        if ($qty <= 0) {
-            throw new \InvalidArgumentException('Quantity must be > 0.');
-        }
-        if ($qty > $this->onHold) {
-            throw new \LogicException('Cannot commit more than reserved.');
-        }
-        if ($qty > $this->onHand) {
-            throw new \LogicException('Not enough stock on hand.');
-        }
-
-        $this->onHold -= $qty;
-        $this->onHand -= $qty;
-    }
 
     public function getAvailable(): int
     {

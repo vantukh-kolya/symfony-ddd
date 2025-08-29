@@ -22,12 +22,6 @@ class FulfillOrderCommandHandler
         if (!$order) {
             throw new \DomainException("Order not found");
         }
-        if ($order->isFulfilled()) {
-            throw new \DomainException("Order already fulfilled");
-        }
-        if (!$order->isReserved()) {
-            throw new \DomainException("Order not reserved");
-        }
         $items = [];
         foreach ($order->getItems() as $i) {
             $items[] = ['product_id' => (string)$i->getProductId(), 'quantity' => $i->getQuantity()];

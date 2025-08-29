@@ -72,7 +72,10 @@
     },
     "require-dev": {
         "deptrac/deptrac": "^3.0",
+        "phpunit/phpunit": "^11.5",
         "qossmic/deptrac": "*",
+        "symfony/browser-kit": "7.3.*",
+        "symfony/css-selector": "7.3.*",
         "symfony/maker-bundle": "*"
     }
 }

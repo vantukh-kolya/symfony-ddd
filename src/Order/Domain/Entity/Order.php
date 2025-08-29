@@ -3,6 +3,9 @@
 namespace App\Order\Domain\Entity;
 
 use App\Order\Domain\Enum\OrderStatus;
+use App\Order\Domain\Exception\InvalidOrderStateTransitionException;
+use App\Order\Domain\Exception\NonPositiveOrderAmountException;
+use App\Order\Domain\Exception\OrderItemsNotReservedException;
 use App\Order\Domain\ValueObject\OrderLine;
 use App\SharedKernel\Domain\ValueObject\Money;
 
@@ -19,7 +22,7 @@ class Order
     {
         $amountToPayValue = $amountToPay->toInt();
         if ($amountToPayValue <= 0) {
-            throw new \InvalidArgumentException("Order amount must be greater than zero.");
+            throw new NonPositiveOrderAmountException("Order amount must be greater than zero.");
         }
 
         $order = new self();
@@ -37,6 +40,12 @@ class Order
 
     public function fulfill(): void
     {
+        if ($this->isFulfilled()) {
+            throw new InvalidOrderStateTransitionException("Order already fulfilled");
+        }
+        if (!$this->isReserved()) {
+            throw new OrderItemsNotReservedException("Order items not reserved");
+        }
         $this->status = OrderStatus::FULFILLED->value;
         $this->fulfilledAt = new \DateTime();
     }
