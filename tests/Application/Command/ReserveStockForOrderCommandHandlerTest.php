@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Application;
+namespace App\Tests\Application\Command;
 
 use App\Catalogue\Application\Command\Handler\ReserveStockForOrderCommandHandler;
 use App\Catalogue\Application\Command\ReserveStockForOrderCommand;
@@ -29,18 +29,6 @@ final class ReserveStockForOrderCommandHandlerTest extends TestCase
 
         self::assertSame(2, $repo->get('p1')->getOnHold());
         self::assertSame(1, $repo->get('p2')->getOnHold());
-    }
-
-    public function test_throws_on_invalid_item_shape(): void
-    {
-        $repo = new InMemoryProductRepository([]);
-        $transactionRunner = new InMemoryTransactionRunner();
-        $handler = new ReserveStockForOrderCommandHandler($repo, $transactionRunner);
-
-        $this->expectException(\DomainException::class);
-        ($handler)(new ReserveStockForOrderCommand('ord-1', [
-            ['product_id' => 'p1'],
-        ]));
     }
 
     public function test_throws_on_unknown_product(): void

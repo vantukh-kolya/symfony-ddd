@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Application;
+namespace App\Tests\Application\Command;
 
 use App\Catalogue\Application\Command\CreateProductCommand;
 use App\Catalogue\Application\Command\Handler\CreateProductCommandHandler;

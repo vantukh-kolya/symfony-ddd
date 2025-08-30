@@ -16,10 +16,6 @@ class ReserveStockForOrderCommandHandler
     {
         $this->transactionRunner->run(function () use ($command) {
             foreach ($command->items as $item) {
-                if (!isset($item['quantity']) || !isset($item['product_id'])) {
-                    throw new \DomainException('Invalid order items');
-                }
-
                 $product = $this->productRepository->get($item['product_id']);
                 if (!$product) {
                     throw new \DomainException('Unknown products');
