@@ -13,6 +13,7 @@
         </many-to-one>
 
         <field name="productId" column="product_id" type="string" length="64"/>
+        <field name="name" column="name" type="string" length="255"/>
         <field name="quantity" type="integer"/>
         <field name="price" type="integer"/>
 

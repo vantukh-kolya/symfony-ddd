@@ -21,7 +21,7 @@ final class GetProductsQueryHandlerTest extends TestCase
         $repo = new InMemoryProductRepository($products);
         $handler = new GetProductsQueryHandler($repo);
 
-        $result = ($handler)(new GetProductsQuery(true, 2000));
+        $result = ($handler)(new GetProductsQuery());
 
         self::assertCount(count($products), $result);
 

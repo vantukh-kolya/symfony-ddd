@@ -5,6 +5,8 @@ namespace App\Order\Presentation\Http\Controller;
 use App\Order\Application\Command\CreateOrderCommand;
 use App\Order\Application\Command\Handler\CreateOrderCommandHandler;
 use App\Order\Application\Command\Handler\FulfillOrderCommandHandler;
+use App\Order\Application\Query\GetOrdersQuery;
+use App\Order\Application\Query\Handler\GetOrdersQueryHandler;
 use App\Order\Presentation\Http\HttpResponseFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +19,12 @@ class OrderController
 {
     public function __construct(private HttpResponseFactory $responseFactory)
     {
+    }
+
+    #[Route('', name: 'orders.list', methods: ['GET'])]
+    public function listOrders(GetOrdersQueryHandler $handler, Request $request): JsonResponse
+    {
+        return $this->responseFactory->success($handler(new GetOrdersQuery($request->get('status'))));
     }
 
     #[Route('', name: 'orders.create', methods: ['POST'])]

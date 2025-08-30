@@ -31,6 +31,11 @@ final class Money
         return $this->amount / (10 ** $this->scale);
     }
 
+    public function equals(self $other): bool
+    {
+        return $this->amount === $other->amount;
+    }
+
     public function __toString(): string
     {
         return number_format($this->toFloat(), 2, '.', '');

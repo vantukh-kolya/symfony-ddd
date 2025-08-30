@@ -32,7 +32,7 @@ class Order
         $order->createdAt = new \DateTime();
 
         foreach ($lines as $l) {
-            $order->items[] = OrderItem::create($order, $l->productId(), $l->quantity(), $l->price()->toInt());
+            $order->items[] = OrderItem::create($order, $l->productId(), $l->getName(), $l->quantity(), $l->price()->toInt());
         }
 
         return $order;
@@ -85,4 +85,11 @@ class Order
     {
         return $this->status === OrderStatus::RESERVED->value;
     }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+
 }

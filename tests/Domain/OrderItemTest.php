@@ -15,7 +15,7 @@ final class OrderItemTest extends TestCase
         $order = Order::create(
             'ord-7',
             Money::fromInt(1000),
-            new OrderLine('p1', 1, Money::fromInt(1000)),
+            new OrderLine('p1', 'Product 1', 1, Money::fromInt(1000)),
         );
 
         $items = [...$order->getItems()];
@@ -24,11 +24,11 @@ final class OrderItemTest extends TestCase
         $item = $items[0];
         self::assertSame('p1', $item->getProductId());
         self::assertSame(1, $item->getQuantity());
-        self::assertSame(1000, $item->getPrice());
+        self::assertTrue(Money::fromInt(1000)->equals($item->getPrice()));
 
-        $direct = OrderItem::create($order, 'p2', 2, 500);
+        $direct = OrderItem::create($order, 'p2', 'Product 2', 2, 500);
         self::assertSame('p2', $direct->getProductId());
         self::assertSame(2, $direct->getQuantity());
-        self::assertSame(500, $direct->getPrice());
+        self::assertTrue(Money::fromInt(500)->equals($direct->getPrice()));
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Order\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\Order\Domain\Entity\Order;
+use App\Order\Domain\Enum\OrderStatus;
 use App\Order\Domain\Repository\OrderRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AsAlias;
@@ -17,6 +18,18 @@ class OrderRepository implements OrderRepositoryInterface
     public function get(string $orderId): ?Order
     {
         return $this->entityManager->getRepository(Order::class)->findOneBy(['id' => $orderId]);
+    }
+
+    public function getCollection(?OrderStatus $status): array
+    {
+        $qb = $this->entityManager->createQueryBuilder()
+            ->select('o, i')->from(Order::class, 'o')->leftJoin('o.items', 'i');
+
+        if ($status !== null) {
+            $qb->andWhere('o.status = :status')->setParameter('status', $status->value);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     public function add(Order $order): void

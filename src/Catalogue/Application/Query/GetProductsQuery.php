@@ -5,8 +5,8 @@ namespace App\Catalogue\Application\Query;
 readonly class GetProductsQuery
 {
     public function __construct(
-        public readonly bool $onlyAvailable = false,
-        public readonly ?int $maxPrice = null
+        public bool $onlyAvailable = false,
+        public ?int $maxPrice = null
     ) {
     }
 }

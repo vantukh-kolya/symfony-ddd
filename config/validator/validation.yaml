@@ -31,6 +31,9 @@ App\Order\Application\Command\CreateOrderCommand:
                                 product_id:
                                     -   NotBlank: ~
                                     -   Type: string
+                                name:
+                                    -   NotBlank: ~
+                                    -   Type: string
                                 quantity:
                                     -   NotBlank: ~
                                     -   Positive: ~

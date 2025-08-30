@@ -3,7 +3,6 @@
 namespace App\Tests\Support;
 
 use App\Catalogue\Domain\Entity\Product;
-use App\SharedKernel\Domain\ValueObject\Money;
 use App\Catalogue\Domain\Repository\ProductRepositoryInterface;
 
 class InMemoryProductRepository implements ProductRepositoryInterface

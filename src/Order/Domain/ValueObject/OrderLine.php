@@ -8,6 +8,7 @@ class OrderLine
 {
     public function __construct(
         private string $productId,
+        private string $name,
         private int $quantity,
         private Money $price
     ) {
@@ -22,6 +23,11 @@ class OrderLine
     public function productId(): string
     {
         return $this->productId;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     public function quantity(): int
