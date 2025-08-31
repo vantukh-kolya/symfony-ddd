@@ -36,9 +36,11 @@ App\Order\Application\Command\CreateOrderCommand:
                                     -   Type: string
                                 quantity:
                                     -   NotBlank: ~
+                                    -   Type: numeric
                                     -   Positive: ~
                                 price:
                                     -   NotBlank: ~
+                                    -   Type: numeric
                                     -   Positive: ~
 App\Catalogue\Application\Command\ReserveStockForOrderCommand:
     properties:
