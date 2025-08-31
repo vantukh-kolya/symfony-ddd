@@ -172,6 +172,8 @@ deptrac:
             - CatalogueApplication
             - Framework
 
+        CatalogueContracts: [ ]
+
     analyser:
         types: [ class, use, function_call ]
 

@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Catalogue\Contracts\Reservation;
+namespace App\Order\Application\Port\Dto;
 
-readonly class ReservationResult
+readonly class ReservationFulfilmentResult
 {
-    private function __construct(public bool $success, public ?string $reason = null)
-    {
+    public function __construct(
+        public bool $success,
+        public ?string $reason = null
+    ) {
     }
 
     public static function ok(): self

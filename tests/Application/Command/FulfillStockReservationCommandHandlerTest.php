@@ -2,15 +2,15 @@
 
 namespace App\Tests\Application\Command;
 
-use App\Catalogue\Application\Command\CommitReservedStockForOrderCommand;
-use App\Catalogue\Application\Command\Handler\CommitReservedStockForOrderCommandHandler;
+use App\Catalogue\Application\Command\FulfillStockReservationCommand;
+use App\Catalogue\Application\Command\Handler\FulfillStockReservationCommandHandler;
 use App\Catalogue\Domain\Entity\Product;
 use App\SharedKernel\Domain\ValueObject\Money;
 use App\Tests\Support\InMemoryProductRepository;
 use App\Tests\Support\InMemoryTransactionRunner;
 use PHPUnit\Framework\TestCase;
 
-final class CommitReservedStockForOrderCommandHandlerTest extends TestCase
+final class FulfillStockReservationCommandHandlerTest extends TestCase
 {
     public function test_commits_reserved_stock_for_all_items(): void
     {
@@ -23,9 +23,9 @@ final class CommitReservedStockForOrderCommandHandlerTest extends TestCase
         $repo = new InMemoryProductRepository(['p1' => $p1, 'p2' => $p2]);
         $transactionRunner = new InMemoryTransactionRunner();
 
-        $handler = new CommitReservedStockForOrderCommandHandler($repo, $transactionRunner);
+        $handler = new FulfillStockReservationCommandHandler($repo, $transactionRunner);
 
-        ($handler)(new CommitReservedStockForOrderCommand('ord-1', [
+        ($handler)(new FulfillStockReservationCommand([
             ['product_id' => 'p1', 'quantity' => 2],
             ['product_id' => 'p2', 'quantity' => 1],
         ]));
@@ -41,10 +41,10 @@ final class CommitReservedStockForOrderCommandHandlerTest extends TestCase
     {
         $repo = new InMemoryProductRepository([]);
         $transactionRunner = new InMemoryTransactionRunner();
-        $handler = new CommitReservedStockForOrderCommandHandler($repo, $transactionRunner);
+        $handler = new FulfillStockReservationCommandHandler($repo, $transactionRunner);
 
         $this->expectException(\DomainException::class);
-        ($handler)(new CommitReservedStockForOrderCommand('ord-1', [
+        ($handler)(new FulfillStockReservationCommand([
             ['product_id' => 'unknown', 'quantity' => 1],
         ]));
     }
@@ -56,10 +56,10 @@ final class CommitReservedStockForOrderCommandHandlerTest extends TestCase
 
         $repo = new InMemoryProductRepository(['p1' => $p1]);
         $transactionRunner = new InMemoryTransactionRunner();
-        $handler = new CommitReservedStockForOrderCommandHandler($repo, $transactionRunner);
+        $handler = new FulfillStockReservationCommandHandler($repo, $transactionRunner);
 
         $this->expectException(\DomainException::class);
-        ($handler)(new CommitReservedStockForOrderCommand('ord-1', [
+        ($handler)(new FulfillStockReservationCommand([
             ['product_id' => 'p1', 'quantity' => 2],
         ]));
     }

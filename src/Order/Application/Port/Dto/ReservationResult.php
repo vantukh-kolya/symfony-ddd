@@ -2,11 +2,11 @@
 
 namespace App\Order\Application\Port\Dto;
 
-final class ReservationResult
+readonly class ReservationResult
 {
     public function __construct(
-        public readonly bool $success,
-        public readonly ?string $reason = null
+        public bool $success,
+        public ?string $reason = null
     ) {
     }
 

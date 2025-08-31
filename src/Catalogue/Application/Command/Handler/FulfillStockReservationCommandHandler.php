@@ -2,17 +2,17 @@
 
 namespace App\Catalogue\Application\Command\Handler;
 
-use App\Catalogue\Application\Command\CommitReservedStockForOrderCommand;
+use App\Catalogue\Application\Command\FulfillStockReservationCommand;
 use App\Catalogue\Domain\Repository\ProductRepositoryInterface;
 use App\SharedKernel\Domain\Persistence\TransactionRunnerInterface;
 
-class CommitReservedStockForOrderCommandHandler
+class FulfillStockReservationCommandHandler
 {
     public function __construct(private ProductRepositoryInterface $productRepository, private TransactionRunnerInterface $transactionRunner)
     {
     }
 
-    public function __invoke(CommitReservedStockForOrderCommand $command): void
+    public function __invoke(FulfillStockReservationCommand $command): void
     {
         $this->transactionRunner->run(function () use ($command) {
             foreach ($command->items as $item) {

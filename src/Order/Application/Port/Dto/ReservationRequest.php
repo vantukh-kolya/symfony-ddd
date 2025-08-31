@@ -2,7 +2,7 @@
 
 namespace App\Order\Application\Port\Dto;
 
-class ReservationRequest
+readonly class ReservationRequest
 {
     public function __construct(public string $orderId, public array $items)
     {

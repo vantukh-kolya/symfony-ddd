@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Catalogue\Contracts\Reservation;
+namespace App\Order\Application\Port\Dto;
 
-final class CommitReservedStockForOrderRequest
+readonly class FulfillReservationRequest
 {
     public function __construct(public string $orderId, public array $items)
     {

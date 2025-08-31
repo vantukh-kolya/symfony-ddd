@@ -2,7 +2,7 @@
 
 namespace App\Catalogue\Contracts\Reservation;
 
-readonly class ReservationCommitResult
+readonly class CatalogueReservationResult
 {
     private function __construct(public bool $success, public ?string $reason = null)
     {

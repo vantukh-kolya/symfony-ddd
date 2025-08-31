@@ -2,15 +2,15 @@
 
 namespace App\Tests\Application\Command;
 
-use App\Catalogue\Application\Command\Handler\ReserveStockForOrderCommandHandler;
-use App\Catalogue\Application\Command\ReserveStockForOrderCommand;
+use App\Catalogue\Application\Command\Handler\ReserveStockCommandHandler;
+use App\Catalogue\Application\Command\ReserveStockCommand;
 use App\Catalogue\Domain\Entity\Product;
 use App\SharedKernel\Domain\ValueObject\Money;
 use App\Tests\Support\InMemoryProductRepository;
 use App\Tests\Support\InMemoryTransactionRunner;
 use PHPUnit\Framework\TestCase;
 
-final class ReserveStockForOrderCommandHandlerTest extends TestCase
+final class ReserveStockCommandHandlerTest extends TestCase
 {
     public function test_reserves_stock_for_all_items(): void
     {
@@ -20,9 +20,9 @@ final class ReserveStockForOrderCommandHandlerTest extends TestCase
         ]);
         $transactionRunner = new InMemoryTransactionRunner();
 
-        $handler = new ReserveStockForOrderCommandHandler($repo, $transactionRunner);
+        $handler = new ReserveStockCommandHandler($repo, $transactionRunner);
 
-        ($handler)(new ReserveStockForOrderCommand('ord-1', [
+        ($handler)(new ReserveStockCommand([
             ['product_id' => 'p1', 'quantity' => 2],
             ['product_id' => 'p2', 'quantity' => 1],
         ]));
@@ -35,10 +35,10 @@ final class ReserveStockForOrderCommandHandlerTest extends TestCase
     {
         $repo = new InMemoryProductRepository([]);
         $tx = new InMemoryTransactionRunner();
-        $handler = new ReserveStockForOrderCommandHandler($repo, $tx);
+        $handler = new ReserveStockCommandHandler($repo, $tx);
 
         $this->expectException(\DomainException::class);
-        ($handler)(new ReserveStockForOrderCommand('ord-1', [
+        ($handler)(new ReserveStockCommand([
             ['product_id' => 'unknown', 'quantity' => 1],
         ]));
     }
