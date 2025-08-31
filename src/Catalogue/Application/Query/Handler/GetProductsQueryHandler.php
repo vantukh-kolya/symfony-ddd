@@ -20,7 +20,7 @@ class GetProductsQueryHandler
                 $result[] = [
                     'id' => $product->getId(),
                     'name' => $product->getName(),
-                    'price' => $product->getPrice()->toFloat(),
+                    'price' => $product->getPrice()->toMajorString(),
                     'quantity' => $product->getAvailable()
                 ];
             }

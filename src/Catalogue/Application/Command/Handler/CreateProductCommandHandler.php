@@ -16,7 +16,7 @@ class CreateProductCommandHandler
     public function __invoke(CreateProductCommand $command): Product
     {
         return $this->transactionRunner->run(function () use ($command) {
-            $product = Product::create($command->id, $command->name, Money::fromInt($command->price), $command->onHand);
+            $product = Product::create($command->id, $command->name, Money::fromMinor($command->price), $command->onHand);
             $this->productRepository->add($product);
 
             return $product;

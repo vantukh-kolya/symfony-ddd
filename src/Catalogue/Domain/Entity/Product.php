@@ -25,7 +25,7 @@ class Product
         $self = new self();
         $self->id = $id;
         $self->name = $name;
-        $self->price = $price->toInt();
+        $self->price = $price->toMinor();
         $self->onHand = $onHand;
         return $self;
     }
@@ -61,7 +61,7 @@ class Product
 
     public function getPrice(): Money
     {
-        return Money::fromInt($this->price);
+        return Money::fromMinor($this->price);
     }
 
     public function getId(): string

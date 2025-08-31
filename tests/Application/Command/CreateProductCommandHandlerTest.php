@@ -26,7 +26,7 @@ final class CreateProductCommandHandlerTest extends TestCase
         self::assertSame($cmd->id, $product->getId());
         self::assertSame($cmd->name, $product->getName());
         self::assertSame($cmd->onHand, $product->getOnHand());
-        self::assertSame($cmd->price, $product->getPrice()->toInt());
+        self::assertSame($cmd->price, $product->getPrice()->toMinor());
         self::assertTrue($transactionRunner->committed);
     }
 

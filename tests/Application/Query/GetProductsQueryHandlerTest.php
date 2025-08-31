@@ -14,8 +14,8 @@ final class GetProductsQueryHandlerTest extends TestCase
     public function test_maps_products_from_repository(): void
     {
         $products = [
-            Product::create('p1', 'A', Money::fromInt(1999), 5),
-            Product::create('p2', 'B', Money::fromInt(2500), 0),
+            Product::create('p1', 'A', Money::fromMinor(1999), 5),
+            Product::create('p2', 'B', Money::fromMinor(2500), 0),
         ];
 
         $repo = new InMemoryProductRepository($products);
@@ -28,7 +28,7 @@ final class GetProductsQueryHandlerTest extends TestCase
         foreach ($products as $i => $product) {
             self::assertSame($product->getId(), $result[$i]['id']);
             self::assertSame($product->getName(), $result[$i]['name']);
-            self::assertSame($product->getPrice()->toFloat(), $result[$i]['price']);
+            self::assertSame($product->getPrice()->toMajorString(), $result[$i]['price']);
             self::assertSame($product->getAvailable(), $result[$i]['quantity']);
         }
     }

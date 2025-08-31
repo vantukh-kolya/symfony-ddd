@@ -32,10 +32,10 @@ class CreateOrderCommandHandler
     {
         return $this->transactionRunner->run(function () use ($command) {
             $lines = array_map(
-                fn(array $p) => new OrderLine((string)$p['product_id'], (string)$p['name'], (int)$p['quantity'], Money::fromInt($p['price'])),
+                fn(array $p) => new OrderLine((string)$p['product_id'], (string)$p['name'], (int)$p['quantity'], Money::fromMinor($p['price'])),
                 $command->products
             );
-            $order = Order::create($command->id, Money::fromInt($command->amountToPay), ...$lines);
+            $order = Order::create($command->id, Money::fromMinor($command->amountToPay), ...$lines);
 
             $this->orderRepository->add($order);
 

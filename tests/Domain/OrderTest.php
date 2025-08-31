@@ -16,7 +16,7 @@ final class OrderTest extends TestCase
     {
         $order = Order::create(
             'ord-1',
-            Money::fromInt(1500),
+            Money::fromMinor(1500),
             $this->line('p1', 'Product 1', 1, 500),
             $this->line('p2', 'Product 2', 2, 500),
         );
@@ -28,18 +28,18 @@ final class OrderTest extends TestCase
         self::assertCount(2, $items);
         self::assertSame('p1', $items[0]->getProductId());
         self::assertSame(1, $items[0]->getQuantity());
-        self::assertTrue(Money::fromInt(500)->equals($items[0]->getPrice()));
+        self::assertTrue(Money::fromMinor(500)->equals($items[0]->getPrice()));
     }
 
     public function test_create_rejects_non_positive_amount(): void
     {
         $this->expectException(NonPositiveOrderAmountException::class);
-        Order::create('ord-2', Money::fromInt(0));
+        Order::create('ord-2', Money::fromMinor(0));
     }
 
     public function test_fulfill_happy_path_requires_reserved(): void
     {
-        $order = Order::create('ord-3', Money::fromInt(500), $this->line('p1', 'Product 1', 1, 500));
+        $order = Order::create('ord-3', Money::fromMinor(500), $this->line('p1', 'Product 1', 1, 500));
         $order->setReserved();
 
         $order->fulfill();
@@ -49,7 +49,7 @@ final class OrderTest extends TestCase
 
     public function test_fulfill_throws_when_not_reserved(): void
     {
-        $order = Order::create('ord-4', Money::fromInt(500), $this->line('p1', 'Product 1', 1, 500));
+        $order = Order::create('ord-4', Money::fromMinor(500), $this->line('p1', 'Product 1', 1, 500));
 
         $this->expectException(OrderItemsNotReservedException::class);
         $order->fulfill();
@@ -57,7 +57,7 @@ final class OrderTest extends TestCase
 
     public function test_fulfill_throws_when_already_fulfilled(): void
     {
-        $order = Order::create('ord-5', Money::fromInt(500), $this->line('p1', 'Product 1', 1, 500));
+        $order = Order::create('ord-5', Money::fromMinor(500), $this->line('p1', 'Product 1', 1, 500));
         $order->setReserved();
         $order->fulfill();
 
@@ -67,7 +67,7 @@ final class OrderTest extends TestCase
 
     public function test_set_failed_sets_status_failed(): void
     {
-        $order = Order::create('ord-6', Money::fromInt(500), $this->line('p1', 'Product 1', 1, 500));
+        $order = Order::create('ord-6', Money::fromMinor(500), $this->line('p1', 'Product 1', 1, 500));
         $order->setFailed();
 
         self::assertFalse($order->isReserved());
@@ -76,7 +76,7 @@ final class OrderTest extends TestCase
 
     private function line(string $pid, string $name, int $qty, int $price): OrderLine
     {
-        return new OrderLine($pid, $name, $qty, Money::fromInt($price));
+        return new OrderLine($pid, $name, $qty, Money::fromMinor($price));
     }
 
 }

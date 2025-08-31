@@ -47,6 +47,6 @@ class OrderItem
 
     public function getPrice(): Money
     {
-        return Money::fromInt($this->price);
+        return Money::fromMinor($this->price);
     }
 }

@@ -14,8 +14,8 @@ final class CommitReservedStockForOrderCommandHandlerTest extends TestCase
 {
     public function test_commits_reserved_stock_for_all_items(): void
     {
-        $p1 = Product::create('p1', 'A', Money::fromInt(100), 5);
-        $p2 = Product::create('p2', 'B', Money::fromInt(200), 3);
+        $p1 = Product::create('p1', 'A', Money::fromMinor(100), 5);
+        $p2 = Product::create('p2', 'B', Money::fromMinor(200), 3);
 
         $p1->hold(2);
         $p2->hold(1);
@@ -51,7 +51,7 @@ final class CommitReservedStockForOrderCommandHandlerTest extends TestCase
 
     public function test_throws_when_committing_more_than_reserved(): void
     {
-        $p1 = Product::create('p1', 'A', Money::fromInt(100), 5);
+        $p1 = Product::create('p1', 'A', Money::fromMinor(100), 5);
         $p1->hold(1);
 
         $repo = new InMemoryProductRepository(['p1' => $p1]);

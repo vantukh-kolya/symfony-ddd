@@ -41,7 +41,7 @@ class GetOrdersQueryHandler
                 'id' => $item->getId(),
                 'name' => $item->getName(),
                 'quantity' => $item->getQuantity(),
-                'price' => $item->getPrice()->toFloat()
+                'price' => $item->getPrice()->toMajorString()
             ];
         }
 

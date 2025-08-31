@@ -4,40 +4,45 @@ namespace App\SharedKernel\Domain\ValueObject;
 
 final class Money
 {
-    private int $amount;
-    private int $scale;
+    private const SCALE = 2; // fixed minor units (e.g., cents)
+    private int $amountMinor; // stored in minor units only
 
-    private function __construct(int $amount, int $scale = 2)
+    private function __construct(int $amountMinor)
     {
-        if ($amount < 0) {
+        if ($amountMinor < 0) {
             throw new \InvalidArgumentException('Money cannot be negative.');
         }
-        $this->amount = $amount;
-        $this->scale = $scale;
+        $this->amountMinor = $amountMinor;
     }
 
-    public static function fromInt(int $amount): self
+    public static function fromMinor(int $amountMinor): self
     {
-        return new self($amount);
+        return new self($amountMinor);
     }
 
-    public function toInt(): int
+    public function toMinor(): int
     {
-        return $this->amount;
+        return $this->amountMinor;
     }
 
-    public function toFloat(): float
+    public function toMajorString(): string
     {
-        return $this->amount / (10 ** $this->scale);
+        if (self::SCALE === 0) {
+            return (string)$this->amountMinor;
+        }
+        $base = 10 ** self::SCALE;
+        $int = intdiv($this->amountMinor, $base);
+        $frac = $this->amountMinor % $base;
+        return sprintf('%d.%0' . self::SCALE . 'd', $int, $frac);
     }
 
     public function equals(self $other): bool
     {
-        return $this->amount === $other->amount;
+        return $this->amountMinor === $other->amountMinor;
     }
 
     public function __toString(): string
     {
-        return number_format($this->toFloat(), 2, '.', '');
+        return $this->toMajorString();
     }
 }

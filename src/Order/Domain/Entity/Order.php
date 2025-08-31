@@ -20,7 +20,7 @@ class Order
 
     public static function create(string $id, Money $amountToPay, OrderLine ...$lines): self
     {
-        $amountToPayValue = $amountToPay->toInt();
+        $amountToPayValue = $amountToPay->toMinor();
         if ($amountToPayValue <= 0) {
             throw new NonPositiveOrderAmountException("Order amount must be greater than zero.");
         }
@@ -32,7 +32,7 @@ class Order
         $order->createdAt = new \DateTime();
 
         foreach ($lines as $l) {
-            $order->items[] = OrderItem::create($order, $l->productId(), $l->getName(), $l->quantity(), $l->price()->toInt());
+            $order->items[] = OrderItem::create($order, $l->productId(), $l->getName(), $l->quantity(), $l->price()->toMinor());
         }
 
         return $order;
