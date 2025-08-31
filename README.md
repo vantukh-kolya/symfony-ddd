@@ -36,9 +36,9 @@ src
 │   │   └── Exception/
 │   │
 │   ├── Infrastructure/
-│   │   ├── Ohs/                   # Open Host Service implementations
-│   │   │   ├── StockReservationPort.php
-│   │   │   └── StockReservationFulfillmentPort.php
+│   │   ├── Ohs/                   # Implementations of the Published Language (Contracts)
+│   │   │   ├── StockReservationAdapter.php
+│   │   │   └── StockReservationFulfillmentAdapter.php
 │   │   └── Persistence/Doctrine/  # Doctrine mappings and repositories
 │   │
 │   └── Presentation/Http/Controller/
