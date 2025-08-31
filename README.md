@@ -196,9 +196,38 @@ The Application layer is organized around **explicit use-cases** that act as **e
 
 Controllers or OHS services construct a Command/Query and invoke its Handler directly.  
 This makes **Application Handlers the clear entry points for all business use-cases**, while keeping the Domain isolated and pure.
-## Tech Stack
 
-- PHP 8.3
-- Symfony 7
-- Doctrine ORM
-- Deptrac (architecture validation)
+## Endpoints
+
+### Catalogue
+- `POST /api/products` Create a new product.  
+  **Body:** `{ "id": "uuid", "name": "string", "price": 1000, "onHand": 1000  }`
+
+- `GET /api/products` Get products
+ 
+### Orders
+- `POST /api/orders`  
+  Create a new order and reserve products.  
+  **Body:** `{ "id": "uuid", "amount_to_pay": 1500, "products": [...] }`
+
+- `GET /api/orders` Get orders
+
+- `POST /api/orders/{orderId}/fulfill` Fulfill order
+
+## Tests
+
+The project includes PHPUnit tests and architecture validation:
+
+- **Domain tests**  
+  Verify business rules and invariants in the Domain layer.  
+  ```bash
+  php bin/phpunit tests/Domain
+- **Application tests**  
+  Validate use-case handlers with in-memory repositories.  
+  ```bash
+  php bin/phpunit tests/Application
+- **Deptrac (architecture tests)**  
+  Enforces strict dependency rules between layers (Domain, Application, Infrastructure, etc.).  
+  Run with:
+  ```bash
+  vendor/bin/deptrac analyse
