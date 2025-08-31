@@ -2,17 +2,83 @@
 
 ![Tests](https://github.com/vantukh-kolya/symfony-ddd/actions/workflows/app.yml/badge.svg)
 
-This repository is a **Symfony 7 demo project** built to showcase **Domain-Driven Design (DDD)**, **Clean Architecture**, and strict **dependency rules** enforced by [Deptrac](https://github.com/qossmic/deptrac).  
+This repository is a **Symfony 7 demo project** built to showcase **Domain-Driven Design (DDD)**, **Clean Architecture**, and strict **dependency rules** enforced by **Deptrac**.  
 It is not a production system - the goal is to demonstrate architecture in Symfony app.
 
 ---
 
-## Core Design Principles
-- Demonstrate **bounded contexts** (Order BC, Catalogue BC, Shared Kernel).
-- Show **layered architecture** (Domain, Application, Infrastructure, Presentation).
-- Apply **dependency rules** so Domain remains pure and independent of framework/infrastructure.
-- Illustrate cross-BC integration via **ACL (Anti-Corruption Layer)** on the consumer side
-  and **OHS (Open Host Service) + Published Language (Contracts)** on the provider side.
+
+## Project Structure
+
+```
+src
+├── Catalogue/                     # Catalogue Bounded Context
+│   ├── Application/               # Use cases (commands, queries, handlers)
+│   │   ├── Command/
+│   │   │   ├── CreateProductCommand.php
+│   │   │   ├── FulfillStockReservationCommand.php
+│   │   │   ├── ReserveStockCommand.php
+│   │   │   └── Handler/           # Handlers orchestrating domain logic
+│   │   └── Query/
+│   │       ├── GetProductsQuery.php
+│   │       └── Handler/GetProductsQueryHandler.php
+│   │
+│   ├── Contracts/                 # Published Language
+│   │   └── Reservation/           # DTOs and ports exposed to other BCs
+│   │       ├── CatalogueReserveStockRequest.php
+│   │       ├── CatalogueReservationResult.php
+│   │       ├── ReservationPort.php
+│   │       └── ReservationFulfillmentPort.php
+│   │
+│   ├── Domain/                    # Pure domain model (entities, repos, exceptions)
+│   │   ├── Entity/
+│   │   ├── Repository/
+│   │   └── Exception/
+│   │
+│   ├── Infrastructure/
+│   │   ├── Ohs/                   # Open Host Service implementations
+│   │   │   ├── StockReservationPort.php
+│   │   │   └── StockReservationFulfillmentPort.php
+│   │   └── Persistence/Doctrine/  # Doctrine mappings and repositories
+│   │
+│   └── Presentation/Http/Controller/
+│       └── ProductController.php  # API entry points
+│
+├── Order/                         # Order Bounded Context
+│   ├── Application/               
+│   │   ├── Command/Handler/
+│   │   │   └── CreateOrderCommand.php
+│   │   ├── Port/                  # Ports (interfaces, DTOs)
+│   │   │   ├── Dto/
+│   │   │   │   ├── ReservationRequest.php
+│   │   │   │   ├── ReservationResult.php
+│   │   │   │   └── FulfillReservationRequest.php
+│   │   │   ├── StockReservationPort.php
+│   │   │   └── StockReservationFulfillmentPort.php
+│   │   └── Query/
+│   │
+│   ├── Domain/                    # Pure Order model
+│   │
+│   ├── Infrastructure/            
+│   │   └── Persistence/Doctrine/  # Doctrine mappings and repositories
+│   │       ├── Mapping/Order.orm.xml
+│   │       └── Mapping/OrderItem.orm.xml
+│   │
+│   ├── Integration/               # Anti-corruption layer to other BCs
+│   │   └── Catalogue/
+│   │       ├── StockReservationAdapter.php
+│   │       └── StockReservationFulfillmentAdapter.php
+│   │
+│   └── Presentation/              # HTTP/CLI controllers if needed
+│
+└── SharedKernel/                  # Cross-cutting primitives and services
+    ├── Domain/
+    │   ├── Persistence/TransactionRunnerInterface.php
+    │   └── ValueObject/Money.php
+    └── Infrastructure/
+        └── Persistence/Doctrine/DoctrineTransactionRunner.php
+```
+
 ---
 
 ## Bounded Contexts
