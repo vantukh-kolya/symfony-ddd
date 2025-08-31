@@ -176,20 +176,9 @@ Catalogue validates request and holds product stock.
 
 ## Cross-BC Communication
 
-- **OrderIntegration** implements `StockReservationPort` using `Catalogue\Contracts\ReservationService`.
+- **OrderIntegration** implements `StockReservationPort` using `Catalogue\Contracts\Reservation\ReservationPort`.
 - **CatalogueContracts** defines the Published Language.
 - This decouples Order from Catalogue’s internals. If Catalogue is extracted into a microservice (REST/Message broker), Order only needs to re-wire the adapter.
-
-## Command / Handler Architecture
-
-The Application layer follows a **Command/Handler** structure **without a command bus or Messenger**:
-
-- **Commands** are simple DTOs carrying scalar input data (e.g. `CreateOrderCommand`).
-- **Handlers** are invoked directly (e.g. `$handler($command)`), no bus in between.
-- Controllers (or OHS services) construct the Command, validate it, and call the Handler.
-- This keeps use-cases explicit and easy to trace while avoiding unnecessary infrastructure overhead.
-
----
 
 ## Application Layer: Commands & Queries
 
