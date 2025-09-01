@@ -42,7 +42,7 @@ App\Order\Application\Command\CreateOrderCommand:
                                     -   NotBlank: ~
                                     -   Type: numeric
                                     -   Positive: ~
-App\Catalogue\Application\Command\ReserveStockForOrderCommand:
+App\Catalogue\Application\Command\ReserveStockCommand:
     properties:
         orderId:
             -   Type: string
@@ -61,7 +61,7 @@ App\Catalogue\Application\Command\ReserveStockForOrderCommand:
                                 quantity:
                                     -   NotNull: ~
                                     -   Positive: ~
-App\Catalogue\Application\Command\CommitReservedStockForOrderCommand:
+App\Catalogue\Application\Command\FulfillStockReservationCommand:
     properties:
         orderId:
             -   Type: string

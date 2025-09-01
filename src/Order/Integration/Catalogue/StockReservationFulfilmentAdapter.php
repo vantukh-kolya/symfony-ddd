@@ -8,7 +8,7 @@ use App\Order\Application\Port\Dto\FulfillReservationRequest;
 use App\Order\Application\Port\Dto\ReservationFulfilmentResult;
 use App\Order\Application\Port\StockReservationFulfilmentPort;
 
-class StockReservationFulfilmentAdapter implements StockReservationFulfilmentPort
+readonly class StockReservationFulfilmentAdapter implements StockReservationFulfilmentPort
 {
     public function __construct(private ReservationFulfillmentPort $reservationFulfillment)
     {
