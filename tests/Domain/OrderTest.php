@@ -14,21 +14,29 @@ final class OrderTest extends TestCase
 {
     public function test_create_order_ok(): void
     {
+        $lines = [
+            ['p1', 'Product 1', 1, 500],
+            ['p2', 'Product 2', 2, 500],
+        ];
+
         $order = Order::create(
             'ord-1',
             Money::fromMinor(1500),
-            $this->line('p1', 'Product 1', 1, 500),
-            $this->line('p2', 'Product 2', 2, 500),
+            ...array_map(fn($l) => $this->line(...$l), $lines),
         );
 
         self::assertSame('ord-1', $order->getId());
         self::assertSame(1500, $order->getAmountToPay());
 
         $items = [...$order->getItems()];
-        self::assertCount(2, $items);
-        self::assertSame('p1', $items[0]->getProductId());
-        self::assertSame(1, $items[0]->getQuantity());
-        self::assertTrue(Money::fromMinor(500)->equals($items[0]->getPrice()));
+        self::assertCount(count($lines), $items);
+
+        foreach ($lines as $i => [$pid, , $qty, $price]) {
+            $item = $items[$i];
+            self::assertSame($pid, $item->getProductId());
+            self::assertSame($qty, $item->getQuantity());
+            self::assertTrue(Money::fromMinor($price)->equals($item->getPrice()));
+        }
     }
 
     public function test_create_rejects_non_positive_amount(): void
