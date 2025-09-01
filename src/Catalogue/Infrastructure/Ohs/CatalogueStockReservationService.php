@@ -7,11 +7,10 @@ use App\Catalogue\Application\Command\ReserveStockCommand;
 use App\Catalogue\Contracts\Reservation\CatalogueReservationResult;
 use App\Catalogue\Contracts\Reservation\CatalogueStockReservationPort;
 use App\Catalogue\Contracts\Reservation\CatalogueReserveStockRequest;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class CatalogueStockReservationAdapter implements CatalogueStockReservationPort
+class CatalogueStockReservationService implements CatalogueStockReservationPort
 {
-    public function __construct(private ReserveStockCommandHandler $handler, private ValidatorInterface $validator)
+    public function __construct(private ReserveStockCommandHandler $handler)
     {
     }
 
@@ -19,13 +18,8 @@ class CatalogueStockReservationAdapter implements CatalogueStockReservationPort
     {
         try {
             $command = new ReserveStockCommand($request->items);
-            $errors = $this->validator->validate($command);
-            if ($errors->count() === 0) {
-                ($this->handler)($command);
-                return CatalogueReservationResult::ok();
-            } else {
-                return CatalogueReservationResult::fail("Invalid request");
-            }
+            ($this->handler)($command);
+            return CatalogueReservationResult::ok();
         } catch (\Throwable $e) {
             return CatalogueReservationResult::fail($e->getMessage());
         }

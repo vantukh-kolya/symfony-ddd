@@ -29,10 +29,10 @@ services:
 
     # ---- Catalogue BC OHS Adapters ----
     App\Catalogue\Contracts\Reservation\StockReservationPort:
-            alias: App\Catalogue\Infrastructure\Ohs\StockReservationAdapter
+            alias: App\Catalogue\Infrastructure\Ohs\CatalogueStockReservationService
 
     App\Catalogue\Contracts\Reservation\StockReservationFulfillmentPort:
-            alias: App\Catalogue\Infrastructure\Ohs\StockReservationFulfillmentAdapter
+            alias: App\Catalogue\Infrastructure\Ohs\CatalogueStockReservationFulfillmentService
 
     # ------------------------------------------------------------------------
     # Cross-cutting Infrastructure

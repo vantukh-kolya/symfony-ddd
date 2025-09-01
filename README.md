@@ -38,8 +38,8 @@ src
 │   │
 │   ├── Infrastructure/
 │   │   ├── Ohs/                   # Implementations of the Published Language (Contracts)
-│   │   │   ├── CatalogueStockReservationAdapter.php
-│   │   │   └── CatalogueStockReservationFulfillmentAdapter.php
+│   │   │   ├── CatalogueStockReservationService.php
+│   │   │   └── CatalogueStockReservationFulfillmentService.php
 │   │   ├── Persistence/Doctrine/  # Doctrine mappings and repositories
 │   │   └── Validation/            # Symfony adapter for CommandValidatorInterface
 │   │       └── SymfonyCommandValidator.php
