@@ -6,9 +6,9 @@ use App\Catalogue\Application\Command\FulfillStockReservationCommand;
 use App\Catalogue\Application\Command\Handler\FulfillStockReservationCommandHandler;
 use App\Catalogue\Contracts\Reservation\CatalogueFulfillReservationRequest;
 use App\Catalogue\Contracts\Reservation\FulfillReservationResult;
-use App\Catalogue\Contracts\Reservation\ReservationFulfillmentPort;
+use App\Catalogue\Contracts\Reservation\CatalogueStockReservationFulfillmentPort;
 
-class StockReservationFulfillmentAdapter implements ReservationFulfillmentPort
+class StockCatalogueStockReservationFulfillmentAdapter implements CatalogueStockReservationFulfillmentPort
 {
     public function __construct(private FulfillStockReservationCommandHandler $handler)
     {

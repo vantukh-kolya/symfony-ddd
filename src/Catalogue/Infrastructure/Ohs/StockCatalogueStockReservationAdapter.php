@@ -5,11 +5,11 @@ namespace App\Catalogue\Infrastructure\Ohs;
 use App\Catalogue\Application\Command\Handler\ReserveStockCommandHandler;
 use App\Catalogue\Application\Command\ReserveStockCommand;
 use App\Catalogue\Contracts\Reservation\CatalogueReservationResult;
-use App\Catalogue\Contracts\Reservation\ReservationPort;
+use App\Catalogue\Contracts\Reservation\CatalogueStockReservationPort;
 use App\Catalogue\Contracts\Reservation\CatalogueReserveStockRequest;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class StockReservationAdapter implements ReservationPort
+class StockCatalogueStockReservationAdapter implements CatalogueStockReservationPort
 {
     public function __construct(private ReserveStockCommandHandler $handler, private ValidatorInterface $validator)
     {

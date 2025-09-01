@@ -16,16 +16,29 @@ services:
     App\:
         resource: '../src/'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+        # ------------------------------------------------------------------------
+        # Custom service aliases for ports/adapters
+        # ------------------------------------------------------------------------
+
+    # ---- Order BC → Catalogue BC (ACL Adapters) ----
     App\Order\Application\Port\StockReservationPort:
         alias: App\Order\Integration\Catalogue\StockReservationAdapter
-    App\Catalogue\Contracts\Reservation\ReservationService:
-        alias: App\Catalogue\Infrastructure\Ohs\StockReservationService
-    App\Order\Application\Port\ReservationCommitterPort:
-        alias: App\Order\Integration\Catalogue\ReservationCommitterAdapter
-    App\Catalogue\Contracts\Reservation\ReservationCommitterService:
-        alias: App\Catalogue\Infrastructure\Ohs\StockReservationCommitterService
+
+    App\Order\Application\Port\StockReservationFulfilmentPort:
+        alias: App\Order\Integration\Catalogue\StockReservationFulfilmentAdapter
+
+    # ---- Catalogue BC OHS Adapters ----
+    App\Catalogue\Contracts\Reservation\StockReservationPort:
+            alias: App\Catalogue\Infrastructure\Ohs\StockReservationAdapter
+
+    App\Catalogue\Contracts\Reservation\StockReservationFulfillmentPort:
+            alias: App\Catalogue\Infrastructure\Ohs\StockReservationFulfillmentAdapter
+
+    # ------------------------------------------------------------------------
+    # Cross-cutting Infrastructure
+    # ------------------------------------------------------------------------
+
+    # Global exception listener (maps exceptions to ResponseEnvelope/JsonResponse)
     App\SharedKernel\Infrastructure\Http\Exception\ExceptionListener:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }

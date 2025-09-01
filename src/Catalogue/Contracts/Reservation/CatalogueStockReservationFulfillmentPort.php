@@ -2,7 +2,7 @@
 
 namespace App\Catalogue\Contracts\Reservation;
 
-interface ReservationFulfillmentPort
+interface CatalogueStockReservationFulfillmentPort
 {
     public function fulfill(CatalogueFulfillReservationRequest $request): FulfillReservationResult;
 }

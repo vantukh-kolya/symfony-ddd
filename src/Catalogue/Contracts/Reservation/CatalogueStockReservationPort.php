@@ -2,7 +2,7 @@
 
 namespace App\Catalogue\Contracts\Reservation;
 
-interface ReservationPort
+interface CatalogueStockReservationPort
 {
     public function reserve(CatalogueReserveStockRequest $request): CatalogueReservationResult;
 }

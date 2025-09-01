@@ -2,7 +2,7 @@
 
 namespace App\Order\Integration\Catalogue;
 
-use App\Catalogue\Contracts\Reservation\ReservationFulfillmentPort;
+use App\Catalogue\Contracts\Reservation\CatalogueStockReservationFulfillmentPort;
 use App\Catalogue\Contracts\Reservation\CatalogueFulfillReservationRequest;
 use App\Order\Application\Port\Dto\FulfillReservationRequest;
 use App\Order\Application\Port\Dto\ReservationFulfilmentResult;
@@ -10,7 +10,7 @@ use App\Order\Application\Port\StockReservationFulfilmentPort;
 
 readonly class StockReservationFulfilmentAdapter implements StockReservationFulfilmentPort
 {
-    public function __construct(private ReservationFulfillmentPort $reservationFulfillment)
+    public function __construct(private CatalogueStockReservationFulfillmentPort $reservationFulfillment)
     {
     }
 

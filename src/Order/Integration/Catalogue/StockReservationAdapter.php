@@ -2,15 +2,15 @@
 
 namespace App\Order\Integration\Catalogue;
 
-use App\Catalogue\Contracts\Reservation\ReservationPort;
 use App\Catalogue\Contracts\Reservation\CatalogueReserveStockRequest;
+use App\Catalogue\Contracts\Reservation\CatalogueStockReservationPort;
 use App\Order\Application\Port\Dto\ReservationRequest;
 use App\Order\Application\Port\Dto\ReservationResult;
 use App\Order\Application\Port\StockReservationPort;
 
 readonly class StockReservationAdapter implements StockReservationPort
 {
-    public function __construct(private ReservationPort $reservation)
+    public function __construct(private CatalogueStockReservationPort $reservation)
     {
     }
 

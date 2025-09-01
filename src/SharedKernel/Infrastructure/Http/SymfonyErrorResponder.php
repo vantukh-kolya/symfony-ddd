@@ -2,30 +2,16 @@
 
 namespace App\SharedKernel\Infrastructure\Http;
 
+use App\SharedKernel\Http\ResponseEnvelope;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
-class HttpErrorResponseFactory
+class SymfonyErrorResponder
 {
     public function error(int $code, string $message, string $type = 'error', ?string $traceId = null, array $details = []): JsonResponse
     {
-        $payload = [
-            'error' => [
-                'code' => $code,
-                'message' => $message,
-                'type' => $type,
-            ]
-        ];
-
-        if ($traceId) {
-            $payload['error']['trace_id'] = $traceId;
-        }
-
-        if (!empty($details)) {
-            $payload['error']['details'] = $details;
-        }
-
-        return new JsonResponse($payload, $code);
+        $envelope = ResponseEnvelope::error($code, $message, $type, $traceId, $details);
+        return new JsonResponse($envelope->body, $envelope->status);
     }
 
     public function validationError(ConstraintViolationListInterface $violations, ?string $traceId = null): JsonResponse

@@ -15,6 +15,7 @@ src
 ├── Catalogue/                     # Catalogue Bounded Context
 │   ├── Application/               # Use cases (commands, queries, handlers)
 │   │   ├── Command/
+│   │   │   ├── CommandValidatorInterface.php     # Port for command validation
 │   │   │   ├── CreateProductCommand.php
 │   │   │   ├── FulfillStockReservationCommand.php
 │   │   │   ├── ReserveStockCommand.php
@@ -39,15 +40,19 @@ src
 │   │   ├── Ohs/                   # Implementations of the Published Language (Contracts)
 │   │   │   ├── StockReservationAdapter.php
 │   │   │   └── StockReservationFulfillmentAdapter.php
-│   │   └── Persistence/Doctrine/  # Doctrine mappings and repositories
+│   │   ├── Persistence/Doctrine/  # Doctrine mappings and repositories
+│   │   └── Validation/            # Symfony adapter for CommandValidatorInterface
+│   │       └── SymfonyCommandValidator.php
 │   │
 │   └── Presentation/Http/Controller/
 │       └── ProductController.php  # API entry points
 │
 ├── Order/                         # Order Bounded Context
 │   ├── Application/               
-│   │   ├── Command/Handler/
-│   │   │   └── CreateOrderCommand.php
+│   │   ├── Command/
+│   │   │   ├── CommandValidatorInterface.php     # Port for command validation
+│   │   │   └── Handler/
+│   │   │       └── CreateOrderCommandHandler.php
 │   │   ├── Port/                  # Ports (interfaces, DTOs)
 │   │   │   ├── Dto/
 │   │   │   │   ├── ReservationRequest.php
@@ -56,13 +61,16 @@ src
 │   │   │   ├── StockReservationPort.php
 │   │   │   └── StockReservationFulfillmentPort.php
 │   │   └── Query/
+│   │       └── GetOrdersQuery.php
 │   │
 │   ├── Domain/                    # Pure Order model
 │   │
 │   ├── Infrastructure/            
-│   │   └── Persistence/Doctrine/  # Doctrine mappings and repositories
-│   │       ├── Mapping/Order.orm.xml
-│   │       └── Mapping/OrderItem.orm.xml
+│   │   ├── Persistence/Doctrine/  # Doctrine mappings and repositories
+│   │   │   ├── Mapping/Order.orm.xml
+│   │   │   └── Mapping/OrderItem.orm.xml
+│   │   └── Validation/            # Symfony adapter for CommandValidatorInterface
+│   │       └── SymfonyCommandValidator.php
 │   │
 │   ├── Integration/               # Anti-corruption layer to other BCs
 │   │   └── Catalogue/
@@ -71,12 +79,18 @@ src
 │   │
 │   └── Presentation/              # HTTP/CLI controllers if needed
 │
-└── SharedKernel/                  # Cross-cutting primitives and services
-    ├── Domain/
-    │   ├── Persistence/TransactionRunnerInterface.php
-    │   └── ValueObject/Money.php
-    └── Infrastructure/
-        └── Persistence/Doctrine/DoctrineTransactionRunner.php
+└── SharedKernel/                  # Cross-cutting primitives and adapters
+│   ├── Domain/
+│   │   ├── Persistence/TransactionRunnerInterface.php
+│   │   └── ValueObject/Money.php
+│   ├── Http/                                      # Transport-agnostic HTTP helpers (no Symfony)
+│   │   └── ResponseEnvelope.php                   # Unified success/error envelope (data/meta|error)
+│   └── Infrastructure/
+│   │   └── Http/
+│   │       ├── SymfonyErrorResponder.php
+│   │       └── Exception/ExceptionListener.php    # Maps exceptions → ResponseEnvelope/JsonResponse
+└── ├── Persistence/Doctrine/DoctrineTransactionRunner.php
+
 ```
 
 ---
