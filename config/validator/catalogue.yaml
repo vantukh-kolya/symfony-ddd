@@ -15,38 +15,8 @@ App\Catalogue\Application\Command\CreateProductCommand:
             -   Type: integer
             -   GreaterThanOrEqual:
                     value: 0
-App\Order\Application\Command\CreateOrderCommand:
-    properties:
-        amountToPay:
-            -   Type: integer
-            -   NotBlank: ~
-            -   Positive: ~
-
-        products:
-            -   Type: array
-            -   NotBlank: ~
-            -   All:
-                    -   Collection:
-                            fields:
-                                product_id:
-                                    -   NotBlank: ~
-                                    -   Type: string
-                                name:
-                                    -   NotBlank: ~
-                                    -   Type: string
-                                quantity:
-                                    -   NotBlank: ~
-                                    -   Type: numeric
-                                    -   Positive: ~
-                                price:
-                                    -   NotBlank: ~
-                                    -   Type: numeric
-                                    -   Positive: ~
 App\Catalogue\Application\Command\ReserveStockCommand:
     properties:
-        orderId:
-            -   Type: string
-            -   NotBlank: ~
         items:
             -   Type: array
             -   NotBlank: ~
@@ -63,9 +33,6 @@ App\Catalogue\Application\Command\ReserveStockCommand:
                                     -   Positive: ~
 App\Catalogue\Application\Command\FulfillStockReservationCommand:
     properties:
-        orderId:
-            -   Type: string
-            -   NotBlank: ~
         items:
             -   Type: array
             -   NotBlank: ~

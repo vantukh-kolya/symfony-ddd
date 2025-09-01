@@ -1,0 +1,27 @@
+App\Order\Application\Command\CreateOrderCommand:
+    properties:
+        amountToPay:
+            -   Type: integer
+            -   NotBlank: ~
+            -   Positive: ~
+
+        products:
+            -   Type: array
+            -   NotBlank: ~
+            -   All:
+                    -   Collection:
+                            fields:
+                                product_id:
+                                    -   NotBlank: ~
+                                    -   Type: string
+                                name:
+                                    -   NotBlank: ~
+                                    -   Type: string
+                                quantity:
+                                    -   NotBlank: ~
+                                    -   Type: numeric
+                                    -   Positive: ~
+                                price:
+                                    -   NotBlank: ~
+                                    -   Type: numeric
+                                    -   Positive: ~
