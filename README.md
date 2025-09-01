@@ -104,7 +104,7 @@ src
   Manages products and stock. Provides APIs for stock reservation and committing.
 
 - **Shared Kernel**  
-  Common primitives (Value Objects like `Money`, `TransactionRunnerInterface`).
+  Common primitives
 
 
 ---
@@ -190,7 +190,7 @@ Catalogue validates request and holds product stock.
 
 ## Cross-BC Communication
 
-- **OrderIntegration** implements `StockReservationPort` using `Catalogue\Contracts\Reservation\ReservationPort`.
+- **OrderIntegration** implements `StockReservationPort` using `Catalogue\Contracts\Reservation\CatalogueStockReservationPort`.
 - **CatalogueContracts** defines the Published Language.
 - This decouples Order from Catalogue’s internals. If Catalogue is extracted into a microservice (REST/Message broker), Order only needs to re-wire the adapter.
 
