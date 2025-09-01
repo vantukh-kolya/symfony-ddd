@@ -2,6 +2,7 @@
 
 namespace App\Tests\Application\Command;
 
+use App\Catalogue\Application\Command\CommandValidatorInterface;
 use App\Catalogue\Application\Command\FulfillStockReservationCommand;
 use App\Catalogue\Application\Command\Handler\FulfillStockReservationCommandHandler;
 use App\Catalogue\Domain\Entity\Product;
@@ -23,7 +24,8 @@ final class FulfillStockReservationCommandHandlerTest extends TestCase
         $repo = new InMemoryProductRepository(['p1' => $p1, 'p2' => $p2]);
         $transactionRunner = new InMemoryTransactionRunner();
 
-        $handler = new FulfillStockReservationCommandHandler($repo, $transactionRunner);
+        $validator = $this->createMock(CommandValidatorInterface::class);
+        $handler = new FulfillStockReservationCommandHandler($repo, $validator, $transactionRunner);
 
         ($handler)(new FulfillStockReservationCommand([
             ['product_id' => 'p1', 'quantity' => 2],
@@ -41,7 +43,9 @@ final class FulfillStockReservationCommandHandlerTest extends TestCase
     {
         $repo = new InMemoryProductRepository([]);
         $transactionRunner = new InMemoryTransactionRunner();
-        $handler = new FulfillStockReservationCommandHandler($repo, $transactionRunner);
+
+        $validator = $this->createMock(CommandValidatorInterface::class);
+        $handler = new FulfillStockReservationCommandHandler($repo, $validator, $transactionRunner);
 
         $this->expectException(\DomainException::class);
         ($handler)(new FulfillStockReservationCommand([
@@ -56,7 +60,9 @@ final class FulfillStockReservationCommandHandlerTest extends TestCase
 
         $repo = new InMemoryProductRepository(['p1' => $p1]);
         $transactionRunner = new InMemoryTransactionRunner();
-        $handler = new FulfillStockReservationCommandHandler($repo, $transactionRunner);
+
+        $validator = $this->createMock(CommandValidatorInterface::class);
+        $handler = new FulfillStockReservationCommandHandler($repo, $validator, $transactionRunner);
 
         $this->expectException(\DomainException::class);
         ($handler)(new FulfillStockReservationCommand([

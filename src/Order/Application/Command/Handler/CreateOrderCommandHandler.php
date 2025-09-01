@@ -2,6 +2,7 @@
 
 namespace App\Order\Application\Command\Handler;
 
+use App\Order\Application\Command\CommandValidatorInterface;
 use App\Order\Application\Command\CreateOrderCommand;
 use App\Order\Application\Port\Dto\ReservationRequest;
 use App\Order\Application\Port\StockReservationPort;
@@ -15,6 +16,7 @@ class CreateOrderCommandHandler
 {
     public function __construct(
         private OrderRepositoryInterface $orderRepository,
+        private CommandValidatorInterface $commandValidator,
         private TransactionRunnerInterface $transactionRunner,
         private StockReservationPort $reservation
     ) {
@@ -22,6 +24,7 @@ class CreateOrderCommandHandler
 
     public function __invoke(CreateOrderCommand $command): Order
     {
+        $this->commandValidator->assert($command);
         $order = $this->createOrder($command);
         $this->reserveProducts($order);
 

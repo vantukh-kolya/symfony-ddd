@@ -39,6 +39,8 @@ deptrac:
             # Technical services shared between BCs (persistence plumbing, logging, DI, etc.).
             # Depends on SharedDomain, Doctrine, and Framework.
 
+        -   name: SharedKernelHttp
+            collectors: [ { type: classNameRegex, value: '#^App\\SharedKernel\\Http\\#' } ]
         # ---- Order Bounded Context
 
         -   name: OrderDomain
@@ -133,9 +135,10 @@ deptrac:
         SharedDomain: [ ]   # Must stay dependency-free
         SharedInfrastructure:
             - SharedDomain
+            - SharedKernelHttp
             - Doctrine        # Persistence/runtime plumbing
             - Framework       # Technical details (logging, DI, etc.)
-
+        SharedKernelHttp: [ ]
         # Order BC
         OrderDomain: [ SharedDomain ]
         OrderApplication:
@@ -143,12 +146,14 @@ deptrac:
             - SharedDomain
         OrderInfrastructure:
             - OrderDomain
+            - OrderApplication
             - SharedDomain
             - Doctrine
             - SharedInfrastructure
             - Framework
         OrderPresentation:
             - OrderApplication
+            - SharedKernelHttp
             - Framework
         OrderIntegration:
             - OrderApplication
@@ -170,6 +175,7 @@ deptrac:
             - Framework
         CataloguePresentation:
             - CatalogueApplication
+            - SharedKernelHttp
             - Framework
 
         CatalogueContracts: [ ]

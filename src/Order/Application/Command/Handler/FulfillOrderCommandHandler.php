@@ -26,7 +26,7 @@ class FulfillOrderCommandHandler
         foreach ($order->getItems() as $i) {
             $items[] = ['product_id' => (string)$i->getProductId(), 'quantity' => $i->getQuantity()];
         }
-        $stockFulfillmentResult = $this->stock->commitReservation(new FulfillReservationRequest($items));
+        $stockFulfillmentResult = $this->stock->fulfill(new FulfillReservationRequest($orderId, $items));
         $this->transactionRunner->run(function () use ($order, $stockFulfillmentResult) {
             if ($stockFulfillmentResult->success) {
                 $order->fulfill();

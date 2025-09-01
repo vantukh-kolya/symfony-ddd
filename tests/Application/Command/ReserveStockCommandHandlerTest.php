@@ -2,6 +2,7 @@
 
 namespace App\Tests\Application\Command;
 
+use App\Catalogue\Application\Command\CommandValidatorInterface;
 use App\Catalogue\Application\Command\Handler\ReserveStockCommandHandler;
 use App\Catalogue\Application\Command\ReserveStockCommand;
 use App\Catalogue\Domain\Entity\Product;
@@ -20,7 +21,8 @@ final class ReserveStockCommandHandlerTest extends TestCase
         ]);
         $transactionRunner = new InMemoryTransactionRunner();
 
-        $handler = new ReserveStockCommandHandler($repo, $transactionRunner);
+        $validator = $this->createMock(CommandValidatorInterface::class);
+        $handler = new ReserveStockCommandHandler($repo, $validator, $transactionRunner);
 
         ($handler)(new ReserveStockCommand([
             ['product_id' => 'p1', 'quantity' => 2],
@@ -35,7 +37,9 @@ final class ReserveStockCommandHandlerTest extends TestCase
     {
         $repo = new InMemoryProductRepository([]);
         $tx = new InMemoryTransactionRunner();
-        $handler = new ReserveStockCommandHandler($repo, $tx);
+
+        $validator = $this->createMock(CommandValidatorInterface::class);
+        $handler = new ReserveStockCommandHandler($repo, $validator, $tx);
 
         $this->expectException(\DomainException::class);
         ($handler)(new ReserveStockCommand([

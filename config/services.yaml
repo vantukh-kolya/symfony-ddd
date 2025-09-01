@@ -26,3 +26,6 @@ services:
         alias: App\Order\Integration\Catalogue\ReservationCommitterAdapter
     App\Catalogue\Contracts\Reservation\ReservationCommitterService:
         alias: App\Catalogue\Infrastructure\Ohs\StockReservationCommitterService
+    App\SharedKernel\Infrastructure\Http\Exception\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
