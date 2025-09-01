@@ -28,8 +28,8 @@ src
 │   │   └── Reservation/           # DTOs and ports exposed to other BCs
 │   │       ├── CatalogueReserveStockRequest.php
 │   │       ├── CatalogueReservationResult.php
-│   │       ├── ReservationPort.php
-│   │       └── ReservationFulfillmentPort.php
+│   │       ├── CatalogueReservationPort.php
+│   │       └── CatalogueReservationFulfillmentPort.php
 │   │
 │   ├── Domain/                    # Pure domain model (entities, repos, exceptions)
 │   │   ├── Entity/
@@ -38,8 +38,8 @@ src
 │   │
 │   ├── Infrastructure/
 │   │   ├── Ohs/                   # Implementations of the Published Language (Contracts)
-│   │   │   ├── StockReservationAdapter.php
-│   │   │   └── StockReservationFulfillmentAdapter.php
+│   │   │   ├── CatalogueStockReservationAdapter.php
+│   │   │   └── CatalogueStockReservationFulfillmentAdapter.php
 │   │   ├── Persistence/Doctrine/  # Doctrine mappings and repositories
 │   │   └── Validation/            # Symfony adapter for CommandValidatorInterface
 │   │       └── SymfonyCommandValidator.php

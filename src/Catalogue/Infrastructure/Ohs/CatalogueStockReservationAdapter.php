@@ -9,7 +9,7 @@ use App\Catalogue\Contracts\Reservation\CatalogueStockReservationPort;
 use App\Catalogue\Contracts\Reservation\CatalogueReserveStockRequest;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class StockCatalogueStockReservationAdapter implements CatalogueStockReservationPort
+class CatalogueStockReservationAdapter implements CatalogueStockReservationPort
 {
     public function __construct(private ReserveStockCommandHandler $handler, private ValidatorInterface $validator)
     {
