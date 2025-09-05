@@ -1,4 +1,4 @@
-# Symfony Domain Driven Design(DDD) and Clean Architecture
+# Symfony Domain Driven Design (DDD) and Clean Architecture
 
 ![Tests](https://github.com/vantukh-kolya/symfony-ddd/actions/workflows/app.yml/badge.svg)
 
